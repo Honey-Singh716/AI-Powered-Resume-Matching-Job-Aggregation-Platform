@@ -134,7 +134,7 @@ AI/
 ### 1. Clone the Repository
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/Honey-Singh716/AI-Resume-Matching-Job-Aggregation-Platform.git
 cd AI
 ```
 
