@@ -57,7 +57,7 @@ function showToast(message, type = 'success') {
         setTimeout(() => toast.remove(), 300);
     }, 3000);
 }
-const API_URL = "http://127.0.0.1:8000";
+const API_URL = "";
 
 // --- State Management ---
 let state = {
@@ -295,11 +295,11 @@ async function loadRecommendedJobs() {
         let html = jobs.map(job => {
             const score = Math.round(job.similarity_score * 100);
             const badgeClass = score >= 80 ? 'match-high' : score >= 50 ? 'match-med' : 'match-low';
-            
+
             const actionButton = (job.source === 'internal' && job.id)
                 ? `<button class="btn primary-btn" style="margin-top: 1rem; padding: 0.4rem 1rem;" onclick="applyForJob(${job.id})">Apply Now</button>`
                 : `<a href="${job.job_url || '#'}" target="_blank" class="btn outline-btn" style="margin-top: 1rem; text-decoration: none; display: inline-flex; align-items: center; padding: 0.4rem 1rem;">View Job →</a>`;
-            
+
             return `
                 <div class="item-card" style="margin-bottom: 1rem;">
                     <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem;">
@@ -438,7 +438,7 @@ function renderJobs(jobs, skip, q = '') {
         const actionButton = (job.source === 'internal')
             ? `<button class="btn primary-btn" onclick="applyForJob(${job.id})" style="padding: 0.4rem 1rem;">Apply Now</button>`
             : `<a href="${job.job_url || '#'}" target="_blank" class="btn outline-btn" style="text-decoration: none; display: inline-flex; align-items: center; padding: 0.4rem 1rem;">View Job →</a>`;
-            
+
         return `
             <div class="item-card">
                 <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.5rem;">
@@ -662,10 +662,10 @@ async function searchCandidates() {
         }
 
         container.innerHTML = results.map(c => {
-            const skillsList = c.skills.split(',').map(s => 
+            const skillsList = c.skills.split(',').map(s =>
                 `<span class="match-badge" style="margin: 2px; background: rgba(59,130,246,0.1); color: #93c5fd; border: 1px solid rgba(59,130,246,0.2); border-radius: 20px; padding: 2px 8px; font-size: 0.75rem; font-weight: 500; display: inline-block;">${s.trim()}</span>`
             ).join('');
-            
+
             return `
                 <div class="item-card" style="display: flex; flex-direction: column; gap: 0.75rem; justify-content: space-between;">
                     <div>
