@@ -697,7 +697,14 @@ async function apiCall(endpoint, method = 'GET', body = null) {
     if (body) config.body = body instanceof FormData ? body : JSON.stringify(body);
 
     const res = await fetch(`${API_URL}${endpoint}`, config);
-    const data = await res.json();
+    
+    let data;
+    try {
+        data = await res.json();
+    } catch (e) {
+        if (!res.ok) throw new Error(`Server error ${res.status}: ${res.statusText}`);
+        throw new Error("Invalid JSON response from server");
+    }
 
     if (!res.ok) {
         if (res.status === 401) {
