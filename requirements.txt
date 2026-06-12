@@ -1,0 +1,27 @@
+# Web Framework
+fastapi==0.115.0
+uvicorn==0.30.6
+python-multipart==0.0.9
+
+# Database
+sqlalchemy==2.0.35
+psycopg2-binary==2.9.9
+pgvector==0.3.5
+
+# Authentication & Security
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+
+# AI & ML
+groq==0.11.0
+sentence-transformers==3.1.1
+scikit-learn==1.5.2
+
+# PDF Parsing
+PyPDF2==3.0.1
+
+# Utilities
+python-dotenv==1.0.1
+pydantic[email]==2.9.2
+requests==2.32.3
+apscheduler==3.10.4

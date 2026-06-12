@@ -1,0 +1,29 @@
+from models.candidate import Candidate
+from sqlalchemy.orm import Session
+
+def create_candidate(
+        skills,experience,embedding,user_id,db
+):
+    
+    candidate = Candidate(skills=skills,experience=experience,embedding=embedding,user_id=user_id)
+
+    db.add(candidate)
+    db.commit()
+    db.refresh(candidate)
+
+    return candidate
+
+
+def search_candidates(query: str, db: Session):
+    """Search candidates by skills (case insensitive simple match)"""
+    search_term = f"%{query}%"
+    return db.query(Candidate).filter(Candidate.skills.ilike(search_term)).all()
+
+
+
+def get_candidate_by_id(candidate_id,db):
+    return db.query(Candidate).filter(Candidate.id == candidate_id).first()
+
+
+def get_candidate_by_user_id(user_id, db):
+    return db.query(Candidate).filter(Candidate.user_id == user_id).first()
