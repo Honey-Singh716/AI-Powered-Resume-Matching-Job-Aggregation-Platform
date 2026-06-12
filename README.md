@@ -1,3 +1,12 @@
+---
+title: AI Resume Matcher
+emoji: 🚀
+colorFrom: blue
+colorTo: indigo
+sdk: docker
+pinned: false
+---
+
 # 🤖 AI Resume Matcher — Intelligent Job Matching Platform
 
 An AI-powered recruitment platform that connects candidates with the best job opportunities using **semantic similarity matching**, **LLM-based resume parsing**, and **real-time job aggregation** from multiple external sources.
