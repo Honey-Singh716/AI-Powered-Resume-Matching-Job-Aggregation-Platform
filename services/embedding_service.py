@@ -23,7 +23,7 @@ def generate_embedding(
         text: str
 ):
     model = get_model()
-    embedding = model.encode(text)
+    embedding = model.encode(text, show_progress_bar=False)
 
     return embedding
 
@@ -33,8 +33,8 @@ def calculate_semantic_score(
         job_text: str
 ):
     model = get_model()
-    candidate_embedding = model.encode(candidate_text)
-    job_embedding = model.encode(job_text)
+    candidate_embedding = model.encode(candidate_text, show_progress_bar=False)
+    job_embedding = model.encode(job_text, show_progress_bar=False)
 
     similarity = cosine_similarity(
         [candidate_embedding],

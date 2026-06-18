@@ -18,6 +18,7 @@ def chat(
     response = ask_ai(
         request.message,
         request.candidate_id,
+        request.role,
         db
     )
 

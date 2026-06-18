@@ -13,13 +13,16 @@ client = Groq(
 from repositories.candidate_repo import get_candidate_by_id
 
 
-def ask_ai(prompt: str, candidate_id: int = None, db = None):
-    system_prompt = "You are a helpful AI Career Advisor."
-    
-    if candidate_id and db:
-        candidate = get_candidate_by_id(candidate_id, db)
-        if candidate:
-            system_prompt += f"\n\nThe user you are talking to has the following profile:\nSkills: {candidate.skills}\nExperience: {candidate.experience}\n\nProvide tailored, personalized advice based on their specific background."
+def ask_ai(prompt: str, candidate_id: int = None, role: str = None, db = None):
+    if role == "recruiter":
+        system_prompt = "You are an expert AI Recruitment Assistant. Your goal is to help the recruiter draft compelling job descriptions, formulate technical interview questions, evaluate candidate skill sets, and write professional outreach emails. Provide concise, actionable, and industry-standard HR and recruitment advice."
+    else:
+        system_prompt = "You are a helpful AI Career Advisor."
+        
+        if candidate_id and db:
+            candidate = get_candidate_by_id(candidate_id, db)
+            if candidate:
+                system_prompt += f"\n\nThe user you are talking to has the following profile:\nSkills: {candidate.skills}\nExperience: {candidate.experience}\n\nProvide tailored, personalized advice based on their specific background."
 
     response = client.chat.completions.create(
         model="llama-3.3-70b-versatile",
@@ -55,7 +58,8 @@ def parse_resume(
 
     {{
     "skills": [],
-    "experience": ""
+    "experience": "",
+    "education": ""
     }}
 
     Resume:

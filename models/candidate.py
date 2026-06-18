@@ -11,5 +11,6 @@ class Candidate(Base):
     user_id = Column(Integer,ForeignKey("users.id"), nullable=False)
     skills = Column(String,nullable=False)
     experience = Column(String,nullable=False)
+    education = Column(String,nullable=True)
 
     embedding = Column(Vector(384))

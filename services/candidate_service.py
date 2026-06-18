@@ -10,9 +10,12 @@ def save_candidate(parsed_resume,user_id,db):
 
     experience = parsed_resume["experience"]
 
+    education = parsed_resume.get("education", "")
+
     candidate_text = f"""
     Skills: {skills}
     Experience: {experience}
+    Education: {education}
     """
     
     embedding = generate_embedding(candidate_text)
@@ -23,9 +26,10 @@ def save_candidate(parsed_resume,user_id,db):
     if candidate:
         candidate.skills = skills
         candidate.experience = experience
+        candidate.education = education
         candidate.embedding = embedding
         db.commit()
         db.refresh(candidate)
         return candidate
     else:
-        return create_candidate(skills,experience,embedding,user_id,db)
+        return create_candidate(skills,experience,embedding,user_id,db,education=education)

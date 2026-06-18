@@ -120,7 +120,6 @@ def process_and_normalize_jobs(db: Session) -> Dict[str, int]:
         ext_id = str(item.get("id"))
         summary["fetched"] += 1
         
-        # Check duplicate
         if get_job_by_source_and_external_id(db, "remoteok", ext_id):
             summary["skipped"] += 1
             continue
@@ -150,86 +149,87 @@ def process_and_normalize_jobs(db: Session) -> Dict[str, int]:
         summary["inserted"] += 1
         
     # --- 2. GREENHOUSE ---
-    logger.info("Fetching Greenhouse jobs...")
-    gh_raw = fetch_greenhouse_jobs()
-    for item in gh_raw:
-        ext_id = str(item.get("id"))
-        summary["fetched"] += 1
-        
-        # Check duplicate
-        if get_job_by_source_and_external_id(db, "greenhouse", ext_id):
-            summary["skipped"] += 1
-            continue
+    greenhouse_companies = ["github", "twitch", "stripe", "reddit", "discord", "airbnb", "dropbox", "lyft", "pinterest", "plaid", "instacart"]
+    for company_slug in greenhouse_companies:
+        logger.info(f"Fetching Greenhouse jobs for {company_slug}...")
+        gh_raw = fetch_greenhouse_jobs(company_slug)
+        for item in gh_raw:
+            ext_id = str(item.get("id"))
+            summary["fetched"] += 1
             
-        # Parse skills and employment type from metadata
-        skills_str = "Software Development"
-        emp_type = "Full-time"
-        metadata = item.get("metadata", [])
-        if isinstance(metadata, list):
-            for meta in metadata:
-                name = str(meta.get("name", "")).lower()
-                val = str(meta.get("value", ""))
-                if "skills" in name:
-                    skills_str = val
-                elif "employment" in name or "type" in name:
-                    emp_type = val
-                    
-        location_data = item.get("location")
-        loc_str = location_data.get("name") if isinstance(location_data, dict) else str(location_data)
-        
-        norm_job = {
-            "title": item.get("title", "Software Engineer"),
-            "company": item.get("company", "Greenhouse Partner"),
-            "location": loc_str,
-            "employment_type": emp_type,
-            "salary_min": None,
-            "salary_max": None,
-            "description": item.get("content", ""),
-            "skills_required": skills_str,
-            "experience_required": "Not specified",
-            "source": "greenhouse",
-            "external_job_id": ext_id,
-            "job_url": item.get("absolute_url"),
-            "created_by": None
-        }
-        
-        save_normalized_job(db, norm_job)
-        summary["inserted"] += 1
+            if get_job_by_source_and_external_id(db, "greenhouse", ext_id):
+                summary["skipped"] += 1
+                continue
+                
+            skills_str = "Software Development"
+            emp_type = "Full-time"
+            metadata = item.get("metadata", [])
+            if isinstance(metadata, list):
+                for meta in metadata:
+                    name = str(meta.get("name", "")).lower()
+                    val = str(meta.get("value", ""))
+                    if "skills" in name:
+                        skills_str = val
+                    elif "employment" in name or "type" in name:
+                        emp_type = val
+                        
+            location_data = item.get("location")
+            loc_str = location_data.get("name") if isinstance(location_data, dict) else str(location_data)
+            
+            norm_job = {
+                "title": item.get("title", "Software Engineer"),
+                "company": item.get("company", company_slug.capitalize()),
+                "location": loc_str,
+                "employment_type": emp_type,
+                "salary_min": None,
+                "salary_max": None,
+                "description": item.get("content", ""),
+                "skills_required": skills_str,
+                "experience_required": "Not specified",
+                "source": "greenhouse",
+                "external_job_id": ext_id,
+                "job_url": item.get("absolute_url"),
+                "created_by": None
+            }
+            
+            save_normalized_job(db, norm_job)
+            summary["inserted"] += 1
         
     # --- 3. LEVER ---
-    logger.info("Fetching Lever jobs...")
-    lever_raw = fetch_lever_jobs()
-    for item in lever_raw:
-        ext_id = str(item.get("id"))
-        summary["fetched"] += 1
-        
-        # Check duplicate
-        if get_job_by_source_and_external_id(db, "lever", ext_id):
-            summary["skipped"] += 1
-            continue
+    lever_companies = ["lever", "coursera", "yelp", "eventbrite", "atlassian", "auth0"]
+    for company_slug in lever_companies:
+        logger.info(f"Fetching Lever jobs for {company_slug}...")
+        lever_raw = fetch_lever_jobs(company_slug)
+        for item in lever_raw:
+            ext_id = str(item.get("id"))
+            summary["fetched"] += 1
             
-        categories = item.get("categories", {})
-        emp_type = categories.get("commitment", "Full-time")
-        loc_str = categories.get("location", "Remote")
-        
-        norm_job = {
-            "title": item.get("title", "Developer"),
-            "company": item.get("company", "Lever Partner"),
-            "location": loc_str,
-            "employment_type": emp_type,
-            "salary_min": None,
-            "salary_max": None,
-            "description": item.get("description", ""),
-            "skills_required": "Python, APIs, Backend Development", # Standard fallback
-            "experience_required": "Not specified",
-            "source": "lever",
-            "external_job_id": ext_id,
-            "job_url": item.get("hostedUrl"),
-            "created_by": None
-        }
-        
-        save_normalized_job(db, norm_job)
-        summary["inserted"] += 1
+            if get_job_by_source_and_external_id(db, "lever", ext_id):
+                summary["skipped"] += 1
+                continue
+                
+            categories = item.get("categories", {})
+            emp_type = categories.get("commitment", "Full-time")
+            loc_str = categories.get("location", "Remote")
+            
+            norm_job = {
+                "title": item.get("text", item.get("title", "Developer")),
+                "company": item.get("company", company_slug.capitalize()),
+                "location": loc_str,
+                "employment_type": emp_type,
+                "salary_min": None,
+                "salary_max": None,
+                "description": item.get("descriptionPlain", item.get("description", "")),
+                "skills_required": "Python, APIs, Backend Development", 
+                "experience_required": "Not specified",
+                "source": "lever",
+                "external_job_id": ext_id,
+                "job_url": item.get("hostedUrl"),
+                "created_by": None
+            }
+            
+            save_normalized_job(db, norm_job)
+            summary["inserted"] += 1
         
     logger.info(f"Aggregation session completed. Summary: {summary}")
     return summary

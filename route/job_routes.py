@@ -35,6 +35,7 @@ def read_jobs(
 @router.get("/recommended-jobs", response_model=List[RecommendedJobResponse])
 def get_recommended_jobs_endpoint(
     limit: int = 10,
+    skip: int = 0,
     db: Session = Depends(get_db),
     user = Depends(current_user)
 ):
@@ -42,4 +43,4 @@ def get_recommended_jobs_endpoint(
     if user.role != "candidate":
         raise HTTPException(status_code=403, detail="Only candidates can request recommended jobs")
     
-    return recommend_jobs_for_candidate(user_id=user.id, db=db, limit=limit)
+    return recommend_jobs_for_candidate(user_id=user.id, db=db, limit=limit, skip=skip)

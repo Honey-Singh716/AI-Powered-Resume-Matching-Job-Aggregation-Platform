@@ -31,7 +31,7 @@ def get_all_jobs(db: Session, q: str = None, skip: int = 0, limit: int = 10):
         )
     return query.offset(skip).limit(limit).all()
 
-def get_recommended_jobs(db: Session, candidate_embedding, limit: int = 5):
+def get_recommended_jobs(db: Session, candidate_embedding, limit: int = 5, skip: int = 0):
     """
     Perform a similarity search using pgvector cosine distance.
     Returns a list of tuples: (Job, similarity_score)
@@ -44,6 +44,7 @@ def get_recommended_jobs(db: Session, candidate_embedding, limit: int = 5):
     results = (
         db.query(Job, similarity_score.label("similarity_score"))
         .order_by(similarity_score.desc())
+        .offset(skip)
         .limit(limit)
         .all()
     )

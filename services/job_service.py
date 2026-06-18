@@ -57,7 +57,7 @@ def get_jobs_list(skip: int, limit: int, db: Session, q: str = None):
     """Retrieve jobs list with optional query filter."""
     return get_all_jobs(db, q=q, skip=skip, limit=limit)
 
-def recommend_jobs_for_candidate(user_id: int, db: Session, limit: int = 5):
+def recommend_jobs_for_candidate(user_id: int, db: Session, limit: int = 5, skip: int = 0):
     """Find matching jobs for candidate using pgvector similarity search on resume embedding."""
     candidate = get_candidate_by_user_id(user_id, db)
     if not candidate:
@@ -66,7 +66,7 @@ def recommend_jobs_for_candidate(user_id: int, db: Session, limit: int = 5):
     if candidate.embedding is None:
         raise HTTPException(status_code=400, detail="Candidate profile does not have an embedding. Please upload your resume.")
         
-    results = get_recommended_jobs(db, candidate.embedding, limit=limit)
+    results = get_recommended_jobs(db, candidate.embedding, limit=limit, skip=skip)
     
     recommended = []
     for job, score in results:

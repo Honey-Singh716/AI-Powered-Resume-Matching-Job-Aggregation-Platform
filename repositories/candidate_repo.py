@@ -2,10 +2,10 @@ from models.candidate import Candidate
 from sqlalchemy.orm import Session
 
 def create_candidate(
-        skills,experience,embedding,user_id,db
+        skills,experience,embedding,user_id,db,education=None
 ):
     
-    candidate = Candidate(skills=skills,experience=experience,embedding=embedding,user_id=user_id)
+    candidate = Candidate(skills=skills,experience=experience,embedding=embedding,user_id=user_id,education=education)
 
     db.add(candidate)
     db.commit()

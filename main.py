@@ -18,7 +18,10 @@ from database import Base
 from database import engine
 
 
-Base.metadata.create_all(bind=engine)
+try:
+    Base.metadata.create_all(bind=engine)
+except Exception as e:
+    print(f"Warning: Could not connect to database during startup. Error: {e}")
 
 app = FastAPI()
 

@@ -41,7 +41,8 @@ def resume_parser(
         "id": candidate.id,
         "user_id" : candidate.user_id,
         "skills": candidate.skills,
-        "experience": candidate.experience
+        "experience": candidate.experience,
+        "education": candidate.education
     }
 
 
@@ -79,7 +80,8 @@ def upload_resume(
         "id": candidate.id,
         "user_id": candidate.user_id,
         "skills": candidate.skills,
-        "experience": candidate.experience
+        "experience": candidate.experience,
+        "education": candidate.education
     }
 
 
@@ -97,7 +99,8 @@ def get_my_profile(
         "id": candidate.id,
         "user_id": candidate.user_id,
         "skills": candidate.skills,
-        "experience": candidate.experience
+        "experience": candidate.experience,
+        "education": candidate.education
     }
 
 
