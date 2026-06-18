@@ -3,6 +3,7 @@ import json
 
 import os
 from dotenv import load_dotenv
+from fastapi import HTTPException
 
 load_dotenv()
 
@@ -24,22 +25,25 @@ def ask_ai(prompt: str, candidate_id: int = None, role: str = None, db = None):
             if candidate:
                 system_prompt += f"\n\nThe user you are talking to has the following profile:\nSkills: {candidate.skills}\nExperience: {candidate.experience}\n\nProvide tailored, personalized advice based on their specific background."
 
-    response = client.chat.completions.create(
-        model="llama-3.3-70b-versatile",
-        messages=[
-            {
-                "role": "system",
-                "content": system_prompt
-            },
-            {
-                "role": "user",
-                "content": prompt
-            }
-        ]
-    )
+    try:
+        response = client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=[
+                {
+                    "role": "system",
+                    "content": system_prompt
+                },
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ]
+        )
 
-    result = response.choices[0].message.content
-    return result
+        result = response.choices[0].message.content
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=502, detail=f"AI service error: {str(e)}")
 
 def parse_resume(
         resume_text:str
@@ -67,16 +71,18 @@ def parse_resume(
     {resume_text}
     """
 
-
-    response = client.chat.completions.create(
-        model="llama-3.3-70b-versatile",
-        messages=[
-            {
-                "role": "user",
-                "content": prompt
-            }
-        ]
-    )
+    try:
+        response = client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=[
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ]
+        )
+    except Exception as e:
+        raise HTTPException(status_code=502, detail=f"AI service error: {str(e)}")
 
     result = response.choices[0].message.content
     
@@ -90,9 +96,29 @@ def parse_resume(
             cleaned = cleaned[:-3].strip()
     
     try:
-        return json.loads(cleaned)
+        parsed = json.loads(cleaned)
     except json.JSONDecodeError:
-        raise Exception(f"AI returned invalid JSON. Raw response: {result[:500]}")
+        raise HTTPException(
+            status_code=422,
+            detail="AI could not parse the resume. Please try uploading again."
+        )
+
+    # Validate the parsed result has the expected structure
+    if not isinstance(parsed, dict):
+        raise HTTPException(status_code=422, detail="AI returned unexpected format. Please try again.")
+    
+    if "skills" not in parsed:
+        parsed["skills"] = []
+    if "experience" not in parsed:
+        parsed["experience"] = ""
+    if "education" not in parsed:
+        parsed["education"] = ""
+    
+    # Ensure skills is always a list
+    if isinstance(parsed["skills"], str):
+        parsed["skills"] = [s.strip() for s in parsed["skills"].split(",") if s.strip()]
+
+    return parsed
 
 
 

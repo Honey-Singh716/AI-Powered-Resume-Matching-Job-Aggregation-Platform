@@ -74,7 +74,12 @@ def upload_resume(
     result = parse_resume(resume_text)
 
     # Save candidate to DB
-    candidate = save_candidate(result, current_user.id, db)
+    try:
+        candidate = save_candidate(result, current_user.id, db)
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to save profile: {str(e)}")
 
     return {
         "id": candidate.id,

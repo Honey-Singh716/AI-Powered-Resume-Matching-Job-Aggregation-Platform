@@ -476,8 +476,14 @@ async function handleLandingFileUpload(file) {
             });
 
             if (!res.ok) {
-                const errData = await res.json();
-                throw new Error(errData.detail || 'Upload failed');
+                let errorMsg = 'Upload failed';
+                try {
+                    const errData = await res.json();
+                    errorMsg = errData.detail || errorMsg;
+                } catch (_) {
+                    errorMsg = `Server error (${res.status}). Please try again.`;
+                }
+                throw new Error(errorMsg);
             }
 
             const data = await res.json();
@@ -1259,8 +1265,14 @@ async function handleResumeUpload(e) {
         });
 
         if (!res.ok) {
-            const errData = await res.json();
-            throw new Error(errData.detail || 'Upload failed');
+            let errorMsg = 'Upload failed';
+            try {
+                const errData = await res.json();
+                errorMsg = errData.detail || errorMsg;
+            } catch (_) {
+                errorMsg = `Server error (${res.status}). Please try again.`;
+            }
+            throw new Error(errorMsg);
         }
 
         const data = await res.json();
