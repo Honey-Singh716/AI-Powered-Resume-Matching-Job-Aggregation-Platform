@@ -19,8 +19,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the rest of the application code
 COPY . .
 
-# Expose the port Hugging Face Spaces expects
+# Expose the ports that might be used
 EXPOSE 7860
+EXPOSE 10000
 
-# Command to run the application on port 7860
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "7860"]
+# Command to run the application, respecting the PORT environment variable if set, otherwise default to 7860
+CMD ["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port ${PORT:-7860}"]
