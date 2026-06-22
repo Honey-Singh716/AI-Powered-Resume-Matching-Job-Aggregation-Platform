@@ -58,7 +58,15 @@ def get_jobs_list(skip: int, limit: int, db: Session, q: str = None):
     return get_all_jobs(db, q=q, skip=skip, limit=limit)
 
 def recommend_jobs_for_candidate(user_id: int, db: Session, limit: int = 5, skip: int = 0):
-    """Find matching jobs for candidate using pgvector similarity search on resume embedding."""
+    """Find matching jobs for candidate using pgvector similarity search on resume embedding (with Redis caching)."""
+    # 1. Try to read from cache
+    from services.redis_service import get_cached_recommendations, set_cached_recommendations
+    
+    cached_res = get_cached_recommendations(user_id, limit, skip)
+    if cached_res is not None:
+        return cached_res
+        
+    # 2. Database query fallback
     candidate = get_candidate_by_user_id(user_id, db)
     if not candidate:
         raise HTTPException(status_code=404, detail="Candidate profile not found. Please parse/upload your resume first.")
@@ -80,4 +88,8 @@ def recommend_jobs_for_candidate(user_id: int, db: Session, limit: int = 5, skip
                 "job_url": job.job_url,
                 "similarity_score": float(round(score, 4))
             })
+            
+    # 3. Cache the results
+    set_cached_recommendations(user_id, limit, skip, recommended, expire_seconds=600)
+    
     return recommended

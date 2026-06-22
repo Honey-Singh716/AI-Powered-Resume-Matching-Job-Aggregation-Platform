@@ -23,6 +23,8 @@ def save_candidate(parsed_resume,user_id,db):
     embedding = embedding.tolist()
 
     candidate = get_candidate_by_user_id(user_id, db)
+    from services.redis_service import invalidate_candidate_recommendations
+    
     if candidate:
         candidate.skills = skills
         candidate.experience = experience
@@ -30,6 +32,9 @@ def save_candidate(parsed_resume,user_id,db):
         candidate.embedding = embedding
         db.commit()
         db.refresh(candidate)
+        invalidate_candidate_recommendations(user_id)
         return candidate
     else:
-        return create_candidate(skills,experience,embedding,user_id,db,education=education)
+        new_candidate = create_candidate(skills,experience,embedding,user_id,db,education=education)
+        invalidate_candidate_recommendations(user_id)
+        return new_candidate

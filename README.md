@@ -166,11 +166,32 @@ DATABASE_URL=postgresql://username:password@localhost:5432/ai_resume_matcher
 GROQ_API_KEY=your_groq_api_key_here
 SECRET_KEY=your-random-secret-key-at-least-32-chars
 CORS_ORIGINS=http://localhost:8000,http://127.0.0.1:8000
+REDIS_URL=redis://localhost:6379/0
 ```
 
 > **💡 Tip:** Generate a strong secret key with: `python -c "import secrets; print(secrets.token_hex(32))"`
 
-### 6. Run the Server
+### 6. Start Redis (Job Recommendation Caching)
+
+Redis caches `/recommended-jobs` results for faster responses. The app falls back to the database if Redis is unavailable, but you should run Redis for full functionality.
+
+**Option A — Docker (recommended):**
+
+```bash
+docker compose up -d redis
+```
+
+**Option B — Windows (Memurai, Redis-compatible):**
+
+Install [Memurai Developer](https://www.memurai.com/) and ensure it listens on port `6379`.
+
+**Option C — PowerShell helper script:**
+
+```powershell
+.\scripts\start-redis.ps1
+```
+
+### 7. Run the Server
 
 ```bash
 uvicorn main:app --reload
@@ -259,6 +280,7 @@ If any external API is unreachable, the system gracefully falls back to mock dat
 | LLM | Groq API (Llama 3.3 70B) |
 | PDF Parsing | PyPDF2 |
 | Scheduler | APScheduler |
+| Cache | Redis |
 | Frontend | Vanilla HTML/CSS/JS + Chart.js |
 
 ---

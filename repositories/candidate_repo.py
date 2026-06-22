@@ -20,7 +20,23 @@ def search_candidates(query: str, db: Session):
     return db.query(Candidate).filter(Candidate.skills.ilike(search_term)).all()
 
 
-
+def update_candidate(candidate_id,skills,experience,education,db):
+    candidate = get_candidate_by_id(candidate_id,db)
+    candidate.skills = skills
+    candidate.experience = experience
+    candidate.education = education
+    db.commit()
+    db.refresh(candidate)
+    
+    # Invalidate Redis recommendations cache
+    try:
+        from services.redis_service import invalidate_candidate_recommendations
+        invalidate_candidate_recommendations(candidate.user_id)
+    except Exception:
+        pass
+        
+    return candidate
+    
 def get_candidate_by_id(candidate_id,db):
     return db.query(Candidate).filter(Candidate.id == candidate_id).first()
 

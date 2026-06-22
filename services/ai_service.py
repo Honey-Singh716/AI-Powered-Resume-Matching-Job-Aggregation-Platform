@@ -97,6 +97,7 @@ def parse_resume(
     
     try:
         parsed = json.loads(cleaned)
+
     except json.JSONDecodeError:
         raise HTTPException(
             status_code=422,
@@ -117,7 +118,7 @@ def parse_resume(
     # Ensure skills is always a list
     if isinstance(parsed["skills"], str):
         parsed["skills"] = [s.strip() for s in parsed["skills"].split(",") if s.strip()]
-
+    
     return parsed
 
 

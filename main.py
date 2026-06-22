@@ -1,7 +1,13 @@
+import os
+import logging
+
+from dotenv import load_dotenv
+
+load_dotenv()
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-import os
 from route.match_routes import router as match_router
 from route.resume_routes import router as resume_parser
 from route.ai_routes import router as ai_router
@@ -25,18 +31,26 @@ except Exception as e:
 
 app = FastAPI()
 
+logging.basicConfig(level=logging.INFO)
+
 @app.on_event("startup")
 def on_startup():
     from scheduler import start_scheduler
+    from services.redis_service import init_redis
+
     start_scheduler()
+    if init_redis():
+        logging.info("Redis caching enabled for job recommendations.")
+    else:
+        logging.warning("Redis not available. Job recommendations will use database only.")
 
 @app.on_event("shutdown")
 def on_shutdown():
     from scheduler import stop_scheduler
-    stop_scheduler()
+    from services.redis_service import close_redis
 
-from dotenv import load_dotenv
-load_dotenv()
+    stop_scheduler()
+    close_redis()
 
 # CORS: read allowed origins from env, default to localhost for development
 cors_origins_str = os.getenv("CORS_ORIGINS", "http://localhost:8000,http://127.0.0.1:8000")
@@ -81,4 +95,4 @@ app.include_router(
 os.makedirs("frontend", exist_ok=True)
 
 # Mount the frontend directory to serve static files
-app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")
+app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")
