@@ -1,4 +1,4 @@
-# 🤖 AI Resume Matcher — Intelligent Job Matching Platform
+# AI Resume Matcher — Intelligent Job Matching Platform
 
 An AI-powered recruitment platform that connects candidates with the best job opportunities using **semantic similarity matching**, **LLM-based resume parsing**, and **real-time job aggregation** from multiple external sources.
 
@@ -6,7 +6,7 @@ Built with **FastAPI**, **PostgreSQL + pgvector**, **Sentence Transformers**, an
 
 ---
 
-## ✨ Key Features
+##  Key Features
 
 ### For Candidates
 - **AI Resume Parsing** — Upload a PDF resume; the system uses Groq LLM (Llama 3.3 70B) to extract structured skills and experience automatically.
@@ -26,7 +26,7 @@ Built with **FastAPI**, **PostgreSQL + pgvector**, **Sentence Transformers**, an
 
 ---
 
-## 🏗️ Architecture
+##  Architecture
 
 ```
 ┌─────────────────────────────────────────────────────┐
@@ -55,7 +55,7 @@ Built with **FastAPI**, **PostgreSQL + pgvector**, **Sentence Transformers**, an
 
 ---
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 AI/
@@ -114,7 +114,7 @@ AI/
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### Prerequisites
 
@@ -169,7 +169,7 @@ CORS_ORIGINS=http://localhost:8000,http://127.0.0.1:8000
 REDIS_URL=redis://localhost:6379/0
 ```
 
-> **💡 Tip:** Generate a strong secret key with: `python -c "import secrets; print(secrets.token_hex(32))"`
+> ** Tip:** Generate a strong secret key with: `python -c "import secrets; print(secrets.token_hex(32))"`
 
 ### 6. Start Redis (Job Recommendation Caching)
 
@@ -203,7 +203,7 @@ The app will be available at:
 
 ---
 
-## 🔐 API Endpoints
+##  API Endpoints
 
 | Method | Endpoint | Auth | Role | Description |
 |--------|----------|------|------|-------------|
@@ -225,7 +225,7 @@ The app will be available at:
 
 ---
 
-## 🧠 How the AI Matching Works
+##  How the AI Matching Works
 
 ### Step 1: Embedding Generation
 When a resume is uploaded or a job is created, the text is converted into a **384-dimensional vector** using the `all-MiniLM-L6-v2` sentence transformer model. This vector captures the *semantic meaning* of the text.
@@ -243,7 +243,7 @@ Results are sorted by semantic score (highest first), so the most relevant match
 
 ---
 
-## 🔄 Job Aggregation Pipeline
+##  Job Aggregation Pipeline
 
 A background scheduler (`APScheduler`) runs every **6 hours** and:
 
@@ -257,7 +257,7 @@ If any external API is unreachable, the system gracefully falls back to mock dat
 
 ---
 
-## 🛡️ Security
+## Security
 
 - **Password Hashing**: All passwords are hashed with bcrypt via `passlib` before storage
 - **JWT Authentication**: Stateless token-based auth using `python-jose` (HS256 algorithm)
@@ -268,7 +268,7 @@ If any external API is unreachable, the system gracefully falls back to mock dat
 
 ---
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 | Layer | Technology |
 |-------|-----------|
@@ -285,6 +285,6 @@ If any external API is unreachable, the system gracefully falls back to mock dat
 
 ---
 
-## 📄 License
+##  License
 
 This project was built for educational and internship purposes.
