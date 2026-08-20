@@ -1,4 +1,11 @@
 import os
+os.environ["OMP_NUM_THREADS"] = "1"
+os.environ["MKL_NUM_THREADS"] = "1"
+os.environ["OPENBLAS_NUM_THREADS"] = "1"
+os.environ["VECLIB_MAXIMUM_THREADS"] = "1"
+os.environ["NUMEXPR_NUM_THREADS"] = "1"
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
+
 import logging
 
 from dotenv import load_dotenv
@@ -37,6 +44,14 @@ logging.basicConfig(level=logging.INFO)
 def on_startup():
     from scheduler import start_scheduler
     from services.redis_service import init_redis
+    from services.embedding_service import get_model
+
+    # Eagerly load the SentenceTransformer model on startup
+    logging.info("Preloading embedding model on startup...")
+    try:
+        get_model()
+    except Exception as e:
+        logging.error(f"Failed to preload embedding model: {e}")
 
     start_scheduler()
     if init_redis():

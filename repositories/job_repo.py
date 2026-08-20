@@ -1,4 +1,4 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, defer
 from models.job import Job
 
 def create_job(db: Session, job_data: dict) -> Job:
@@ -17,11 +17,11 @@ def get_job_by_source_and_external_id(db: Session, source: str, external_job_id:
     """Retrieve a job by its source and external job ID (used for duplicate detection)."""
     if not external_job_id:
         return None
-    return db.query(Job).filter(Job.source == source, Job.external_job_id == external_job_id).first()
+    return db.query(Job).filter(Job.source == source, Job.external_job_id == external_job_id).options(defer(Job.embedding)).first()
 
 def get_all_jobs(db: Session, q: str = None, skip: int = 0, limit: int = 10):
     """Retrieve all jobs with pagination and optional search filter."""
-    query = db.query(Job)
+    query = db.query(Job).options(defer(Job.embedding))
     if q:
         search_filter = f"%{q}%"
         query = query.filter(

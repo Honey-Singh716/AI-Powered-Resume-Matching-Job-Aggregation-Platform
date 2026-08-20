@@ -55,20 +55,35 @@ def upload_resume(
     if current_user.role != "candidate":
         raise HTTPException(status_code=403, detail="Only candidates can upload resumes")
 
-    # Validate file type
-    if not file.filename.endswith(".pdf"):
+    # Validate file type by extension and MIME type
+    if not file.filename.lower().endswith(".pdf"):
         raise HTTPException(status_code=400, detail="Only PDF files are accepted")
 
-    # Extract text from PDF
-    contents = file.file.read()
-    pdf_reader = PdfReader(io.BytesIO(contents))
+    if file.content_type and file.content_type not in ("application/pdf", "application/octet-stream"):
+        raise HTTPException(status_code=400, detail="Only PDF files are accepted")
 
-    resume_text = ""
-    for page in pdf_reader.pages:
-        resume_text += page.extract_text() or ""
+    # Read file into memory and enforce 5MB size limit
+    MAX_FILE_SIZE = 5 * 1024 * 1024  # 5 MB
+    contents = file.file.read()
+    if len(contents) > MAX_FILE_SIZE:
+        raise HTTPException(
+            status_code=413,
+            detail=f"File too large. Maximum allowed size is 5MB (your file: {len(contents) / (1024*1024):.1f}MB)"
+        )
+
+    # Extract text from PDF
+    try:
+        pdf_reader = PdfReader(io.BytesIO(contents))
+        resume_text = ""
+        for page in pdf_reader.pages:
+            text = page.extract_text()
+            if text:
+                resume_text += text
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Could not parse PDF file: {str(e)}")
 
     if not resume_text.strip():
-        raise HTTPException(status_code=400, detail="Could not extract text from PDF")
+        raise HTTPException(status_code=400, detail="Could not extract text from PDF. Make sure the PDF is not scanned/image-only.")
 
     # Send to Groq AI for parsing (same as /parse_resume)
     result = parse_resume(resume_text)

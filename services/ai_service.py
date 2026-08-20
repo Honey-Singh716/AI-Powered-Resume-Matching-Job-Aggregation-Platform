@@ -27,7 +27,7 @@ def ask_ai(prompt: str, candidate_id: int = None, role: str = None, db = None):
 
     try:
         response = client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
+            model=os.getenv("GROQ_MODEL", "openai/gpt-oss-20b"),
             messages=[
                 {
                     "role": "system",
@@ -73,7 +73,7 @@ def parse_resume(
 
     try:
         response = client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
+            model=os.getenv("GROQ_MODEL", "openai/gpt-oss-20b"),
             messages=[
                 {
                     "role": "user",
@@ -86,8 +86,11 @@ def parse_resume(
 
     result = response.choices[0].message.content
     
+    # Strip <think>...</think> blocks from reasoning/thinking models (e.g. Qwen, DeepSeek)
+    import re
+    cleaned = re.sub(r'<think>.*?</think>', '', result, flags=re.DOTALL).strip()
+    
     # Strip markdown code fences if the AI wraps the JSON in ```json ... ```
-    cleaned = result.strip()
     if cleaned.startswith("```"):
         # Remove opening fence (e.g. ```json)
         cleaned = cleaned.split("\n", 1)[1] if "\n" in cleaned else cleaned[3:]

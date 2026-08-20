@@ -111,6 +111,7 @@ def process_and_normalize_jobs(db: Session) -> Dict[str, int]:
     Fetches all jobs from sources, normalizes them, filters duplicates,
     computes embeddings, and stores them in database.
     """
+    import gc
     summary = {"fetched": 0, "inserted": 0, "skipped": 0}
     
     # --- 1. REMOTE OK ---
@@ -147,6 +148,9 @@ def process_and_normalize_jobs(db: Session) -> Dict[str, int]:
         
         save_normalized_job(db, norm_job)
         summary["inserted"] += 1
+    
+    # Clean memory after RemoteOK
+    gc.collect()
         
     # --- 2. GREENHOUSE ---
     greenhouse_companies = ["github", "twitch", "stripe", "reddit", "discord", "airbnb", "dropbox", "lyft", "pinterest", "plaid", "instacart"]
@@ -195,6 +199,9 @@ def process_and_normalize_jobs(db: Session) -> Dict[str, int]:
             save_normalized_job(db, norm_job)
             summary["inserted"] += 1
         
+        # Clean memory after each company slug to prevent spikes
+        gc.collect()
+        
     # --- 3. LEVER ---
     lever_companies = ["lever", "coursera", "yelp", "eventbrite", "atlassian", "auth0"]
     for company_slug in lever_companies:
@@ -230,6 +237,9 @@ def process_and_normalize_jobs(db: Session) -> Dict[str, int]:
             
             save_normalized_job(db, norm_job)
             summary["inserted"] += 1
+        
+        # Clean memory after each company slug
+        gc.collect()
         
     logger.info(f"Aggregation session completed. Summary: {summary}")
     return summary

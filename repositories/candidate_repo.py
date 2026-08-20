@@ -1,5 +1,5 @@
 from models.candidate import Candidate
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, defer
 
 def create_candidate(
         skills,experience,embedding,user_id,db,education=None
@@ -17,7 +17,7 @@ def create_candidate(
 def search_candidates(query: str, db: Session):
     """Search candidates by skills (case insensitive simple match)"""
     search_term = f"%{query}%"
-    return db.query(Candidate).filter(Candidate.skills.ilike(search_term)).all()
+    return db.query(Candidate).filter(Candidate.skills.ilike(search_term)).options(defer(Candidate.embedding)).all()
 
 
 def update_candidate(candidate_id,skills,experience,education,db):

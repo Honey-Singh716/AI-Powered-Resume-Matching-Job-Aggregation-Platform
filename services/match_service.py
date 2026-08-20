@@ -1,4 +1,4 @@
-from repositories.job_repo import get_job_by_id,get_all_jobs
+from repositories.job_repo import get_job_by_id, get_recommended_jobs
 from repositories.candidate_repo import get_candidate_by_id
 from services.embedding_service import calculate_semantic_score_from_embeddings
 from fastapi import HTTPException
@@ -49,37 +49,26 @@ def match_candidate_to_job(candidate_id,job_id,db):
 
 
 
-def recommend_jobs(
-        candidate_id,db
-):
-    
-
-    candidate = get_candidate_by_id(candidate_id,db)
-
+def recommend_jobs(candidate_id, db):
+    candidate = get_candidate_by_id(candidate_id, db)
 
     if not candidate:
         raise HTTPException(status_code=404, detail="Candidate not found")
     
-    # Use stored embedding from DB instead of re-encoding text
-    candidate_embedding = candidate.embedding
+    if candidate.embedding is None:
+        return []
 
-    jobs = get_all_jobs(db)
+    # Query matching jobs from DB using pgvector similarity search (limit=5)
+    results = get_recommended_jobs(db, candidate.embedding, limit=5)
 
     recommendations = []
-    for job in jobs:
-        
-        # Use stored embedding from DB instead of re-encoding text
-        score = calculate_semantic_score_from_embeddings(
-            candidate_embedding, job.embedding
-        )
-
+    for job, score in results:
         recommendations.append(
             {
                 "job_id" : job.id,
                 "title": job.title,
-                "semantic_score": float(round(score,2))
+                "semantic_score": float(round(score, 2))
             }
         )
 
-    recommendations.sort(key=lambda x: x["semantic_score"], reverse=True)
-    return recommendations[:5]
+    return recommendations
