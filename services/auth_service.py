@@ -7,7 +7,7 @@ import os
 from database import get_db
 from sqlalchemy.orm import Session
 
-from repositories.user_repo import get_user_by_email
+from repositories.user_repo_ext import get_user_by_email
 
 from fastapi import Depends, HTTPException, status
 from sqlalchemy.orm import Session
@@ -79,4 +79,8 @@ def current_user(token: str = Depends(oauth2_scheme),db: Session = Depends(get_d
     if user is None:
          raise credentials_exception
     
+    # Block access for unverified users
+    if not getattr(user, 'is_verified', False):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Please verify your email before logging in.")
+
     return user
