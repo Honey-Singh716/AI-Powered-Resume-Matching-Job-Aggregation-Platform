@@ -1,4 +1,4 @@
-﻿from models.user import User
+from models.user import User
 from datetime import datetime
 
 
@@ -44,5 +44,3 @@ def clear_verification_token(user, db):
 
 def get_user_by_verification_hash(token_hash, db):
     return db.query(User).filter(User.verification_token_hash == token_hash).first()
-
-
