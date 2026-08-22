@@ -43,21 +43,9 @@ logging.basicConfig(level=logging.INFO)
 @app.on_event("startup")
 def on_startup():
     from scheduler import start_scheduler
-    from services.redis_service import init_redis
-    from services.embedding_service import get_model
-
-    # Eagerly load the SentenceTransformer model on startup
-    logging.info("Preloading embedding model on startup...")
-    try:
-        get_model()
-    except Exception as e:
-        logging.error(f"Failed to preload embedding model: {e}")
 
     start_scheduler()
-    if init_redis():
-        logging.info("Redis caching enabled for job recommendations.")
-    else:
-        logging.warning("Redis not available. Job recommendations will use database only.")
+    logging.info("Application startup complete. Embedding model will load on first embedding request.")
 
 @app.on_event("shutdown")
 def on_shutdown():
@@ -66,6 +54,11 @@ def on_shutdown():
 
     stop_scheduler()
     close_redis()
+
+
+@app.get("/health")
+def health_check():
+    return {"status": "ok"}
 
 # CORS: read allowed origins from env, default to localhost for development
 cors_origins_str = os.getenv("CORS_ORIGINS", "http://localhost:8000,http://127.0.0.1:8000")
