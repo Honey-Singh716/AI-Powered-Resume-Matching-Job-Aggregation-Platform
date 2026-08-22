@@ -7,11 +7,14 @@ from fastapi import HTTPException
 
 load_dotenv()
 
-client = Groq(
-    api_key=os.getenv("GROQ_API_KEY")
-)
-
 from repositories.candidate_repo import get_candidate_by_id
+
+
+def _get_groq_client():
+    api_key = os.getenv("GROQ_API_KEY")
+    if not api_key:
+        raise HTTPException(status_code=503, detail="GROQ_API_KEY is not configured. Add it to your .env file.")
+    return Groq(api_key=api_key)
 
 
 def ask_ai(prompt: str, candidate_id: int = None, role: str = None, db = None):
@@ -26,6 +29,7 @@ def ask_ai(prompt: str, candidate_id: int = None, role: str = None, db = None):
                 system_prompt += f"\n\nThe user you are talking to has the following profile:\nSkills: {candidate.skills}\nExperience: {candidate.experience}\n\nProvide tailored, personalized advice based on their specific background."
 
     try:
+        client = _get_groq_client()
         response = client.chat.completions.create(
             model=os.getenv("GROQ_MODEL", "openai/gpt-oss-20b"),
             messages=[
@@ -72,6 +76,7 @@ def parse_resume(
     """
 
     try:
+        client = _get_groq_client()
         response = client.chat.completions.create(
             model=os.getenv("GROQ_MODEL", "openai/gpt-oss-20b"),
             messages=[

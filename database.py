@@ -1,6 +1,6 @@
 import os
 from dotenv import load_dotenv
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, inspect, text
 from sqlalchemy.orm import sessionmaker, declarative_base
 
 load_dotenv()
@@ -27,6 +27,35 @@ engine = create_engine(
 )
 
 
+def ensure_user_verification_columns():
+    """Safely add email-verification columns to existing users tables without dropping data."""
+    try:
+        inspector = inspect(engine)
+        if not inspector.has_table("users"):
+            return
+
+        existing_columns = {col["name"] for col in inspector.get_columns("users")}
+        required_columns = {
+            "is_verified": "BOOLEAN NOT NULL DEFAULT FALSE",
+            "verification_token_hash": "VARCHAR(255)",
+            "verification_token_expires_at": "TIMESTAMP WITH TIME ZONE",
+            "verification_token_sent_at": "TIMESTAMP WITH TIME ZONE",
+        }
+
+        with engine.begin() as conn:
+            for column_name, column_sql in required_columns.items():
+                if column_name not in existing_columns:
+                    conn.execute(text(f"ALTER TABLE users ADD COLUMN IF NOT EXISTS {column_name} {column_sql}"))
+
+            if "is_verified" in existing_columns:
+                conn.execute(text("UPDATE users SET is_verified = FALSE WHERE is_verified IS NULL"))
+    except Exception:
+        # Let the app keep booting in local/dev setups, but do not silently ignore real DB problems.
+        # The migration should be visible in logs while preserving user data.
+        import logging
+        logging.getLogger(__name__).exception("Failed to ensure users verification columns exist")
+
+
 SessionLocal = sessionmaker(
     autocommit=False,
     autoflush=False,
@@ -34,6 +63,9 @@ SessionLocal = sessionmaker(
 )
 
 Base = declarative_base()
+
+ensure_user_verification_columns()
+
 
 def get_db():
     db = SessionLocal()

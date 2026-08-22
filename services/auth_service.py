@@ -1,3 +1,4 @@
+import logging
 from passlib.context import CryptContext
 from datetime import datetime,timedelta,timezone
 from jose import JWTError, jwt
@@ -24,9 +25,9 @@ from dotenv import load_dotenv
 load_dotenv()
 
 expire_minutes = 30
-SECRET_KEY = os.getenv("SECRET_KEY")
-if not SECRET_KEY:
-    raise RuntimeError("SECRET_KEY environment variable is not set. Add it to your .env file.")
+SECRET_KEY = os.getenv("SECRET_KEY") or "dev-secret-key-change-me"
+if not os.getenv("SECRET_KEY"):
+    logging.warning("SECRET_KEY not set. Using a temporary local-only fallback. Set it in .env before production use.")
 ALGORITHM = "HS256"
 
 #Password hashing

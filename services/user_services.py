@@ -1,3 +1,4 @@
+import logging
 from fastapi import HTTPException
 
 # Use the extended repository with verification helpers
@@ -9,6 +10,8 @@ import secrets
 import hashlib
 from datetime import datetime, timedelta, timezone
 import os
+
+logger = logging.getLogger(__name__)
 
 
 def save_user(user_data,db):
@@ -40,9 +43,12 @@ def save_user(user_data,db):
     # Send verification email via email service
     try:
         send_verification_email(user.email, raw_token, expires_at)
-    except Exception as e:
-        # Do not leak secrets or token; surface a generic error
-        raise HTTPException(status_code=500, detail="Failed to send verification email")
+    except Exception:
+        logger.exception("Failed to send verification email during signup for %s", user.email)
+        raise HTTPException(
+            status_code=500,
+            detail="Failed to send verification email. Check your Resend API key and verified sender email."
+        )
 
     return user
 

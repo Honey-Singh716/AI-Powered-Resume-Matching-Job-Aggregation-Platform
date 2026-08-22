@@ -1,4 +1,5 @@
-﻿from fastapi import APIRouter, Depends, HTTPException
+﻿import logging
+from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import EmailStr
 from sqlalchemy.orm import Session
@@ -105,7 +106,10 @@ def resend_verification(request: dict, db: Session = Depends(get_db)):
     try:
         send_verification_email(user.email, raw_token, expires_at)
     except Exception:
-        # Do not leak provider errors
-        raise HTTPException(status_code=500, detail="Failed to send verification email")
+        logging.exception("Failed to resend verification email for %s", user.email)
+        raise HTTPException(
+            status_code=500,
+            detail="Failed to send verification email. Check your Resend API key and verified sender email."
+        )
 
     return generic_resp
