@@ -107,9 +107,6 @@ def resend_verification(request: dict, db: Session = Depends(get_db)):
         send_verification_email(user.email, raw_token, expires_at)
     except Exception:
         logging.exception("Failed to resend verification email for %s", user.email)
-        raise HTTPException(
-            status_code=500,
-            detail="Failed to send verification email. Check your Resend API key and verified sender email."
-        )
+        return generic_resp
 
     return generic_resp

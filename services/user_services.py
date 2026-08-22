@@ -40,17 +40,26 @@ def save_user(user_data,db):
     # Persist hashed token and timestamps
     set_verification_token(user, token_hash, expires_at, sent_at, db)
 
-    # Send verification email via email service
+    # Email delivery is best-effort; the account and token remain persisted if Resend fails.
     try:
         send_verification_email(user.email, raw_token, expires_at)
     except Exception:
         logger.exception("Failed to send verification email during signup for %s", user.email)
-        raise HTTPException(
-            status_code=500,
-            detail="Failed to send verification email. Check your Resend API key and verified sender email."
-        )
+        return {
+            "id": user.id,
+            "email": user.email,
+            "role": user.role,
+            "detail": "Account created, but verification email could not be sent right now. Please try resending the verification email later.",
+            "verification_email_sent": False,
+        }
 
-    return user
+    return {
+        "id": user.id,
+        "email": user.email,
+        "role": user.role,
+        "detail": "Account created. Verification email sent.",
+        "verification_email_sent": True,
+    }
 
 
 def login_user(login_data,db):

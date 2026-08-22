@@ -25,6 +25,9 @@ class UserResponse(BaseModel):
 
     role: str
 
+    detail: str | None = None
+    verification_email_sent: bool | None = None
+
     class Config:
 
         from_attributes = True
