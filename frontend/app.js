@@ -360,7 +360,10 @@ async function handleAuth(e) {
 
     try {
         if (!isLoginMode) {
-            await apiCall('/users/register', 'POST', { email, password, role });
+            const registration = await apiCall('/users/register', 'POST', { email, password, role });
+            errorDiv.className = 'form-success';
+            errorDiv.textContent = registration.detail || 'Account created. Please verify your email before signing in.';
+            return;
         }
 
         const formData = new URLSearchParams();
@@ -394,6 +397,7 @@ async function handleAuth(e) {
         showToast(`Welcome back, ${email.split('@')[0]}!`);
         navigateTo(state.role === 'candidate' ? 'candidate-dashboard' : 'recruiter-dashboard');
     } catch (err) {
+        errorDiv.className = 'form-error';
         errorDiv.textContent = err.message || 'Authentication failed';
     } finally {
         submitBtn.disabled = false;
