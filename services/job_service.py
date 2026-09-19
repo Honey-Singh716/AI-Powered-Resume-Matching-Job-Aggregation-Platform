@@ -86,7 +86,14 @@ def recommend_jobs_for_candidate(user_id: int, db: Session, limit: int = 5, skip
                 "location": job.location,
                 "source": job.source,
                 "job_url": job.job_url,
-                "similarity_score": float(round(score, 4))
+                "similarity_score": float(round(score, 4)),
+                "skills_required": job.skills_required,
+                "salary_min": job.salary_min,
+                "salary_max": job.salary_max,
+                "experience_required": job.experience_required,
+                "employment_type": job.employment_type,
+                "description": job.description,
+                "created_at": job.created_at.isoformat() if job.created_at else None,
             })
             
     # 3. Cache the results

@@ -31,7 +31,7 @@ def ask_ai(prompt: str, candidate_id: int = None, role: str = None, db = None):
     try:
         client = _get_groq_client()
         response = client.chat.completions.create(
-            model=os.getenv("GROQ_MODEL", "openai/gpt-oss-20b"),
+            model=os.getenv("GROQ_MODEL", "qwen/qwen3.8-27b"),
             messages=[
                 {
                     "role": "system",
@@ -78,7 +78,7 @@ def parse_resume(
     try:
         client = _get_groq_client()
         response = client.chat.completions.create(
-            model=os.getenv("GROQ_MODEL", "openai/gpt-oss-20b"),
+            model=os.getenv("GROQ_MODEL", "qwen/qwen3.8-27b"),
             messages=[
                 {
                     "role": "user",

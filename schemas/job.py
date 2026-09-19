@@ -36,3 +36,11 @@ class RecommendedJobResponse(BaseModel):
     source: str
     job_url: Optional[str] = None
     similarity_score: float
+    # Additional fields for rich job card rendering in the frontend
+    skills_required: Optional[str] = None
+    salary_min: Optional[int] = None
+    salary_max: Optional[int] = None
+    experience_required: Optional[str] = None
+    employment_type: Optional[str] = None
+    description: Optional[str] = None
+    created_at: Optional[datetime] = None

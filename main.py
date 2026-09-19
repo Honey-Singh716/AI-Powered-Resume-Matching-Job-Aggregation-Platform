@@ -36,24 +36,25 @@ try:
 except Exception as e:
     print(f"Warning: Could not connect to database during startup. Error: {e}")
 
-app = FastAPI()
+from contextlib import asynccontextmanager
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup
+    from scheduler import start_scheduler
+    start_scheduler()
+    logging.info("Application startup complete. Embedding model will load on first embedding request.")
+    yield
+    # Shutdown
+    from scheduler import stop_scheduler
+    from services.redis_service import close_redis
+    stop_scheduler()
+    close_redis()
+
+app = FastAPI(lifespan=lifespan)
 
 logging.basicConfig(level=logging.INFO)
 
-@app.on_event("startup")
-def on_startup():
-    from scheduler import start_scheduler
-
-    start_scheduler()
-    logging.info("Application startup complete. Embedding model will load on first embedding request.")
-
-@app.on_event("shutdown")
-def on_shutdown():
-    from scheduler import stop_scheduler
-    from services.redis_service import close_redis
-
-    stop_scheduler()
-    close_redis()
 
 
 @app.get("/health")

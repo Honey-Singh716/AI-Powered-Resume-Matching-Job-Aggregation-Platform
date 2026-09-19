@@ -356,13 +356,28 @@ async function handleAuth(e) {
     const submitBtn = document.getElementById('auth-submit');
 
     submitBtn.disabled = true;
-    errorDiv.textContent = '';
+    errorDiv.className = 'form-error';
+    errorDiv.innerHTML = '';
 
     try {
         if (!isLoginMode) {
             const registration = await apiCall('/users/register', 'POST', { email, password, role });
-            errorDiv.className = 'form-success';
-            errorDiv.textContent = registration.detail || 'Account created. Please verify your email before signing in.';
+            if (registration.verified === true) {
+                // Email verification is disabled — account is ready to use immediately
+                showToast('Account created! You can now sign in.');
+                switchAuthTab('login');
+                document.getElementById('auth-email').value = email;
+                errorDiv.className = 'form-success';
+                errorDiv.textContent = registration.detail || 'Account created successfully! Please sign in below.';
+            } else if (registration.verification_email_sent === false) {
+                // Account saved but email delivery failed — let user resend
+                errorDiv.className = 'form-success';
+                errorDiv.innerHTML = `${registration.detail || 'Account created, but the verification email could not be sent.'}
+                    <br><a href="#" style="color:var(--primary); font-weight:600;" onclick="resendVerificationEmail('${email}'); return false;">Resend verification email &rarr;</a>`;
+            } else {
+                errorDiv.className = 'form-success';
+                errorDiv.textContent = registration.detail || 'Account created! Please check your email to verify your account before signing in.';
+            }
             return;
         }
 
@@ -376,7 +391,20 @@ async function handleAuth(e) {
             body: formData,
         });
 
-        if (!res.ok) throw new Error('Invalid credentials');
+        if (!res.ok) {
+            let errData;
+            try { errData = await res.json(); } catch(_) { errData = {}; }
+            const msg = errData.detail || 'Invalid credentials';
+            // If the server says the user needs to verify their email, show resend option
+            const needsVerify = msg.toLowerCase().includes('verify');
+            if (needsVerify) {
+                errorDiv.className = 'form-error';
+                errorDiv.innerHTML = `${msg}<br><a href="#" style="color:var(--primary); font-weight:600;" onclick="resendVerificationEmail('${email}'); return false;">Resend verification email &rarr;</a>`;
+            } else {
+                throw new Error(msg);
+            }
+            return;
+        }
 
         const data = await res.json();
         state.token = data.access_token;
@@ -401,6 +429,27 @@ async function handleAuth(e) {
         errorDiv.textContent = err.message || 'Authentication failed';
     } finally {
         submitBtn.disabled = false;
+    }
+}
+
+async function resendVerificationEmail(email) {
+    const errorDiv = document.getElementById('auth-error');
+    if (!email) {
+        email = document.getElementById('auth-email')?.value;
+    }
+    if (!email) return;
+    try {
+        await apiCall('/auth/resend-verification', 'POST', { email });
+        errorDiv.className = 'form-success';
+        errorDiv.textContent = 'Verification email sent! Please check your inbox (and spam folder).';
+    } catch (err) {
+        if (err.message && err.message.includes('429')) {
+            errorDiv.className = 'form-error';
+            errorDiv.textContent = 'Too many requests — please wait a few minutes before requesting another email.';
+        } else {
+            errorDiv.className = 'form-error';
+            errorDiv.textContent = 'Could not resend email. Please try again later.';
+        }
     }
 }
 
