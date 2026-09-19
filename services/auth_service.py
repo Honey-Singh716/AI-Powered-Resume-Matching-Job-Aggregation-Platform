@@ -80,8 +80,8 @@ def current_user(token: str = Depends(oauth2_scheme),db: Session = Depends(get_d
     if user is None:
          raise credentials_exception
     
-    # Block access for unverified users
-    if not getattr(user, 'is_verified', False):
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Please verify your email before logging in.")
+    # Block access for unverified users (Bypassed since verification is disabled)
+    # if not getattr(user, 'is_verified', False):
+    #     raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Please verify your email before logging in.")
 
     return user
