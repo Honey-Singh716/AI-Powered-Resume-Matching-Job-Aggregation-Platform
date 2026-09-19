@@ -32,6 +32,7 @@ def ask_ai(prompt: str, candidate_id: int = None, role: str = None, db = None):
         client = _get_groq_client()
         response = client.chat.completions.create(
             model=os.getenv("GROQ_MODEL", "qwen/qwen3.8-27b"),
+            max_tokens=1000,
             messages=[
                 {
                     "role": "system",
@@ -79,6 +80,7 @@ def parse_resume(
         client = _get_groq_client()
         response = client.chat.completions.create(
             model=os.getenv("GROQ_MODEL", "qwen/qwen3.8-27b"),
+            max_tokens=1000,
             messages=[
                 {
                     "role": "user",
