@@ -53,9 +53,12 @@ def save_job(data: dict, recruiter_id: int, db: Session):
     
     return create_job(db, job_data)
 
-def get_jobs_list(skip: int, limit: int, db: Session, q: str = None):
-    """Retrieve jobs list with optional query filter."""
-    return get_all_jobs(db, q=q, skip=skip, limit=limit)
+def get_jobs_list(skip: int, limit: int, db: Session, q: str = None,
+                  location: str = None, employment_type: str = None, experience: str = None):
+    """Retrieve jobs list with optional search query and filters."""
+    jobs, total = get_all_jobs(db, q=q, skip=skip, limit=limit,
+                               location=location, employment_type=employment_type, experience=experience)
+    return jobs, total
 
 def recommend_jobs_for_candidate(user_id: int, db: Session, limit: int = 5, skip: int = 0):
     """Find matching jobs for candidate using pgvector similarity search on resume embedding (with Redis caching)."""

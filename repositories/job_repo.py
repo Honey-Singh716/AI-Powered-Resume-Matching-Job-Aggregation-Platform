@@ -19,17 +19,33 @@ def get_job_by_source_and_external_id(db: Session, source: str, external_job_id:
         return None
     return db.query(Job).filter(Job.source == source, Job.external_job_id == external_job_id).options(defer(Job.embedding)).first()
 
-def get_all_jobs(db: Session, q: str = None, skip: int = 0, limit: int = 10):
-    """Retrieve all jobs with pagination and optional search filter."""
+def get_all_jobs(db: Session, q: str = None, skip: int = 0, limit: int = 20,
+                 location: str = None, employment_type: str = None, experience: str = None):
+    """Retrieve all jobs with pagination, search, and filter support."""
     query = db.query(Job).options(defer(Job.embedding))
     if q:
         search_filter = f"%{q}%"
         query = query.filter(
             (Job.title.ilike(search_filter)) |
             (Job.skills_required.ilike(search_filter)) |
-            (Job.company.ilike(search_filter))
+            (Job.company.ilike(search_filter)) |
+            (Job.description.ilike(search_filter))
         )
-    return query.offset(skip).limit(limit).all()
+    if location == 'remote':
+        query = query.filter(Job.location.ilike('%remote%'))
+    elif location == 'onsite':
+        query = query.filter(~Job.location.ilike('%remote%'))
+    if employment_type:
+        query = query.filter(Job.employment_type.ilike(f'%{employment_type}%'))
+    if experience == 'entry':
+        query = query.filter(Job.experience_required.ilike('%0%') | Job.experience_required.ilike('%1%') | Job.experience_required.ilike('%entry%') | Job.experience_required.ilike('%junior%'))
+    elif experience == 'mid':
+        query = query.filter(Job.experience_required.ilike('%2%') | Job.experience_required.ilike('%3%') | Job.experience_required.ilike('%mid%'))
+    elif experience == 'senior':
+        query = query.filter(Job.experience_required.ilike('%5%') | Job.experience_required.ilike('%senior%') | Job.experience_required.ilike('%lead%'))
+    total = query.count()
+    jobs = query.order_by(Job.created_at.desc()).offset(skip).limit(limit).all()
+    return jobs, total
 
 def get_recommended_jobs(db: Session, candidate_embedding, limit: int = 5, skip: int = 0):
     """

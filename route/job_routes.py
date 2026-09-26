@@ -22,15 +22,21 @@ def create_new_job(
     new_job = save_job(job_in.model_dump(), user.id, db)
     return new_job
 
-@router.get("/jobs", response_model=List[JobResponse])
+@router.get("/jobs")
 def read_jobs(
     q: Optional[str] = None,
     skip: int = 0,
-    limit: int = 10,
+    limit: int = 20,
+    location: Optional[str] = None,
+    employment_type: Optional[str] = None,
+    experience: Optional[str] = None,
     db: Session = Depends(get_db)
 ):
-    """Get list of all jobs (internal and external) with pagination and optional search filter."""
-    return get_jobs_list(skip=skip, limit=limit, db=db, q=q)
+    """Search all jobs from database with filters and pagination. Returns {jobs, total}."""
+    jobs, total = get_jobs_list(skip=skip, limit=limit, db=db, q=q,
+                                location=location, employment_type=employment_type,
+                                experience=experience)
+    return {"jobs": jobs, "total": total, "skip": skip, "limit": limit}
 
 @router.get("/recommended-jobs", response_model=List[RecommendedJobResponse])
 def get_recommended_jobs_endpoint(

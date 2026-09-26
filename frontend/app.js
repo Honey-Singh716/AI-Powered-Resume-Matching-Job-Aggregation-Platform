@@ -1,4 +1,23 @@
 // ============================================================
+// Theme Initialization
+const savedTheme = localStorage.getItem('theme');
+if (savedTheme === 'light') {
+    document.documentElement.setAttribute('data-theme', 'light');
+}
+
+function toggleTheme() {
+    const root = document.documentElement;
+    const currentTheme = root.getAttribute('data-theme');
+    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+    if (newTheme === 'light') {
+        root.setAttribute('data-theme', 'light');
+    } else {
+        root.removeAttribute('data-theme');
+    }
+    localStorage.setItem('theme', newTheme);
+}
+
+// ============================================================
 // RecruitAI — Application Logic
 // Premium SaaS Job Platform
 // ============================================================
@@ -287,6 +306,7 @@ function renderTopbar(viewId) {
             <span class="topbar-breadcrumb">${titles[viewId] || ''}</span>
         </div>
         <div class="topbar-right">
+            <button class="btn btn-ghost btn-sm" onclick="toggleTheme()" title="Toggle Dark/Light Mode">🌓 Theme</button>
             <button class="btn btn-ghost btn-sm" onclick="toggleChat()">AI Assistant</button>
         </div>
     `;
@@ -816,15 +836,10 @@ async function loadRecommendedJobsList() {
     try {
         const jobs = await apiCall(`/recommended-jobs?limit=${state.jobLimit}&skip=${state.currentJobSkip}`);
         state.recommendedJobsCache = jobs;
-
-        // Also load all jobs as fallback
-        try {
-            const allJobs = await apiCall(`/jobs?skip=0&limit=30`);
-            state.allJobsCache = allJobs;
-        } catch(e) {}
+        state.isGlobalSearch = false;
 
         renderJobGrid(jobs, container);
-        renderPaginationControls(jobs.length);
+        renderPaginationControls(jobs.length, false);
     } catch (err) {
         container.innerHTML = `
             <div class="empty-state" style="grid-column: 1/-1;">
@@ -837,19 +852,30 @@ async function loadRecommendedJobsList() {
     }
 }
 
-function renderPaginationControls(currentCount) {
+function renderPaginationControls(currentCount, isSearch = false) {
     const pagination = document.getElementById('jobs-pagination');
     if (!pagination) return;
-    
+
     const isFirstPage = state.currentJobSkip === 0;
-    const hasNextPage = currentCount === state.jobLimit;
-    
+    let hasNextPage;
+    if (isSearch && state.globalSearchTotal !== undefined) {
+        hasNextPage = state.currentJobSkip + state.jobLimit < state.globalSearchTotal;
+    } else {
+        hasNextPage = currentCount === state.jobLimit;
+    }
+
+    const totalText = isSearch && state.globalSearchTotal !== undefined
+        ? `<span style="color:var(--text-secondary);font-size:0.8rem;align-self:center">${state.globalSearchTotal} results found</span>`
+        : '';
+
     pagination.innerHTML = `
         <button class="btn btn-secondary" onclick="prevJobPage()" ${isFirstPage ? 'disabled' : ''}>← Previous</button>
+        ${totalText}
         <button class="btn btn-secondary" onclick="nextJobPage()" ${!hasNextPage ? 'disabled' : ''}>Next →</button>
     `;
     pagination.style.display = 'flex';
     pagination.style.justifyContent = 'center';
+    pagination.style.alignItems = 'center';
     pagination.style.gap = 'var(--space-4)';
     pagination.style.marginTop = 'var(--space-6)';
 }
@@ -857,14 +883,22 @@ function renderPaginationControls(currentCount) {
 function prevJobPage() {
     if (state.currentJobSkip >= state.jobLimit) {
         state.currentJobSkip -= state.jobLimit;
-        loadRecommendedJobsList();
+        if (state.isGlobalSearch) {
+            executeGlobalSearch();
+        } else {
+            loadRecommendedJobsList();
+        }
         window.scrollTo(0, 0);
     }
 }
 
 function nextJobPage() {
     state.currentJobSkip += state.jobLimit;
-    loadRecommendedJobsList();
+    if (state.isGlobalSearch) {
+        executeGlobalSearch();
+    } else {
+        loadRecommendedJobsList();
+    }
     window.scrollTo(0, 0);
 }
 
@@ -924,52 +958,65 @@ function renderJobGrid(jobs, container) {
     }).join('');
 }
 
-// --- Job Search & Filters ---
+// --- Global DB Search & Local Filters ---
 function debounceJobSearch() {
     clearTimeout(state.searchDebounceTimer);
-    state.searchDebounceTimer = setTimeout(() => applyJobFilters(), 300);
+    state.searchDebounceTimer = setTimeout(() => {
+        state.currentJobSkip = 0; // reset to page 1 on new search
+        applyJobFilters();
+    }, 400);
 }
 
-function applyJobFilters() {
-    const searchTerm = (document.getElementById('job-search-input')?.value || '').toLowerCase();
+async function executeGlobalSearch() {
+    const searchTerm = (document.getElementById('job-search-input')?.value || '').trim();
     const locationFilter = document.getElementById('filter-location')?.value || '';
     const experienceFilter = document.getElementById('filter-experience')?.value || '';
     const typeFilter = document.getElementById('filter-type')?.value || '';
 
-    let jobs = [...(state.recommendedJobsCache.length > 0 ? state.recommendedJobsCache : state.allJobsCache)];
-
-    if (searchTerm) {
-        jobs = jobs.filter(j =>
-            (j.title || '').toLowerCase().includes(searchTerm) ||
-            (j.company || '').toLowerCase().includes(searchTerm) ||
-            (j.skills_required || '').toLowerCase().includes(searchTerm)
-        );
-    }
-
-    if (locationFilter === 'remote') {
-        jobs = jobs.filter(j => (j.location || '').toLowerCase().includes('remote'));
-    } else if (locationFilter === 'onsite') {
-        jobs = jobs.filter(j => !(j.location || '').toLowerCase().includes('remote'));
-    }
-
-    if (experienceFilter) {
-        jobs = jobs.filter(j => {
-            const exp = (j.experience_required || '').toLowerCase();
-            if (experienceFilter === 'entry') return exp.includes('0') || exp.includes('1') || exp.includes('entry') || exp.includes('junior');
-            if (experienceFilter === 'mid') return exp.includes('2') || exp.includes('3') || exp.includes('4') || exp.includes('mid');
-            if (experienceFilter === 'senior') return exp.includes('5') || exp.includes('6') || exp.includes('7') || exp.includes('8') || exp.includes('senior') || exp.includes('lead');
-            return true;
-        });
-    }
-
-    if (typeFilter) {
-        jobs = jobs.filter(j =>
-            (j.employment_type || '').toLowerCase().includes(typeFilter)
-        );
-    }
-
     const container = document.getElementById('recommended-jobs-grid');
-    if (container) renderJobGrid(jobs, container);
+    if (!container) return;
+
+    // Show skeleton
+    container.innerHTML = Array(6).fill(0).map(() => `<div class="skeleton skeleton-card"></div>`).join('');
+
+    const params = new URLSearchParams({
+        skip: state.currentJobSkip,
+        limit: state.jobLimit
+    });
+    if (searchTerm) params.set('q', searchTerm);
+    if (locationFilter) params.set('location', locationFilter);
+    if (experienceFilter) params.set('experience', experienceFilter);
+    if (typeFilter) params.set('employment_type', typeFilter);
+
+    try {
+        const result = await apiCall(`/jobs?${params.toString()}`);
+        const jobs = result.jobs || [];
+        state.globalSearchTotal = result.total || 0;
+        state.isGlobalSearch = true;
+        renderJobGrid(jobs, container);
+        renderPaginationControls(jobs.length, true);
+    } catch(err) {
+        container.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><h3>Search failed</h3><p>Please try again.</p></div>`;
+    }
+}
+
+function applyJobFilters() {
+    const searchTerm = (document.getElementById('job-search-input')?.value || '').trim();
+    const locationFilter = document.getElementById('filter-location')?.value || '';
+    const experienceFilter = document.getElementById('filter-experience')?.value || '';
+    const typeFilter = document.getElementById('filter-type')?.value || '';
+
+    const hasAnyFilter = searchTerm || locationFilter || experienceFilter || typeFilter;
+
+    if (hasAnyFilter) {
+        // Global DB search — hit backend
+        executeGlobalSearch();
+    } else {
+        // No filters — show AI recommended jobs
+        state.isGlobalSearch = false;
+        state.currentJobSkip = 0;
+        loadRecommendedJobsList();
+    }
 }
 
 // --- Job Details Drawer ---
@@ -986,8 +1033,17 @@ function openJobDetails(job) {
     const skills = job.skills_required ? job.skills_required.split(',').map(s => s.trim()) : [];
     const mySkills = state.profileData?.skills ? state.profileData.skills.split(',').map(s => s.trim().toLowerCase()) : [];
 
-    const matchedSkills = skills.filter(s => mySkills.includes(s.toLowerCase()));
-    const missingSkills = skills.filter(s => !mySkills.includes(s.toLowerCase()));
+    // Fuzzy skill matching — check if job skill is contained in any of user's skills, OR vice versa
+    function skillMatches(jobSkill, userSkillsList) {
+        const job = jobSkill.toLowerCase().replace(/[^a-z0-9]/g, '');
+        return userSkillsList.some(us => {
+            const u = us.toLowerCase().replace(/[^a-z0-9]/g, '');
+            return u.includes(job) || job.includes(u) || u === job;
+        });
+    }
+
+    const matchedSkills = skills.filter(s => skillMatches(s, mySkills));
+    const missingSkills = skills.filter(s => !skillMatches(s, mySkills));
 
     body.innerHTML = `
         <!-- Match Breakdown -->
