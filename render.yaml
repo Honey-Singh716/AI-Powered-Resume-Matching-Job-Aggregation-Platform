@@ -1,6 +1,11 @@
 ##############################################################################
 # render.yaml — Infrastructure-as-code for Render.com deployment
 #
+# CPU-only PyTorch:
+#   Without --extra-index-url, pip resolves the default torch wheel which
+#   bundles CUDA (~2 GB). Render is CPU-only, so we point pip at the PyTorch
+#   CPU index to get the slim wheel (~200 MB) instead.
+#
 # Deploy with:  render blueprint apply
 # Or connect this repo in the Render dashboard → "New Web Service"
 ##############################################################################
@@ -13,10 +18,11 @@ services:
     plan: free              # Upgrade to "starter" or higher for production SLAs
 
     # ── Build ─────────────────────────────────────────────────────────────────
-    buildCommand: pip install -r requirements.txt
+    # --extra-index-url ensures pip resolves the CPU-only torch wheel
+    buildCommand: pip install --extra-index-url https://download.pytorch.org/whl/cpu -r requirements.txt
 
     # ── Start ─────────────────────────────────────────────────────────────────
-    # Render injects $PORT automatically (usually 10000).
+    # Render injects $PORT automatically (10000 on most plans).
     startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
 
     # ── Health check ──────────────────────────────────────────────────────────
@@ -25,7 +31,7 @@ services:
     healthCheckPath: /api/health
 
     # ── Environment variables ─────────────────────────────────────────────────
-    # Set these in the Render dashboard (Settings → Environment) or via the CLI.
+    # Set secret values in the Render dashboard (Settings → Environment).
     # Do NOT commit real secret values here.
     envVars:
       - key: DATABASE_URL
@@ -55,4 +61,8 @@ services:
       # CORS_ORIGINS must include your frontend domain(s), comma-separated.
       # Example: https://your-app.vercel.app,https://your-custom-domain.com
       - key: CORS_ORIGINS
+        sync: false
+
+      # Optional: n8n OTP webhook URL for email verification
+      - key: N8N_OTP_WEBHOOK_URL
         sync: false
