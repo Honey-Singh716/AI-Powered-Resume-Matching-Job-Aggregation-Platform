@@ -48,6 +48,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Determine initial route
     const hash = window.location.hash.slice(1) || '';
     if (state.token && state.role) {
+        if (state.role === 'admin') {
+            window.location.href = '/admin.html';
+            return;
+        }
         if (hash && hash !== '/login' && hash !== '/landing') {
             navigateFromHash(hash);
         } else {
@@ -89,6 +93,10 @@ function navigateFromHash(hash) {
         navigateTo(viewId, false);
     } else if (hash === '' || hash === '/') {
         if (state.token) {
+            if (state.role === 'admin') {
+                window.location.href = '/admin.html';
+                return;
+            }
             navigateTo(state.role === 'candidate' ? 'candidate-dashboard' : 'recruiter-dashboard', false);
         } else {
             navigateTo('landing', false);
@@ -149,12 +157,12 @@ document.addEventListener('DOMContentLoaded', () => {
 // --- Router ---
 function navigateTo(viewId, pushHash = true) {
     // Auth guards
-    const publicViews = ['landing', 'login'];
+    const publicViews = ['landing', 'login', 'otp'];
     if (!publicViews.includes(viewId) && !state.token) {
         navigateTo('login');
         return;
     }
-    if ((viewId === 'login' || viewId === 'landing') && state.token) {
+    if ((viewId === 'login' || viewId === 'landing' || viewId === 'otp') && state.token) {
         navigateTo(state.role === 'candidate' ? 'candidate-dashboard' : 'recruiter-dashboard');
         return;
     }
@@ -179,6 +187,7 @@ function navigateTo(viewId, pushHash = true) {
             'saved-jobs': '/saved',
             'applications': '/applications',
             'profile': '/profile',
+            'otp': '/otp',
         };
         window.location.hash = hashMap[viewId] || '/';
     }
@@ -209,7 +218,7 @@ function updateAppShell(viewId) {
     const chatToggle = document.getElementById('chat-toggle-btn');
     const chatWidget = document.getElementById('chat-widget');
 
-    const needsSidebar = !['landing', 'login'].includes(viewId);
+    const needsSidebar = !['landing', 'login', 'otp'].includes(viewId);
 
     if (needsSidebar) {
         sidebar.classList.remove('hidden');
@@ -390,13 +399,16 @@ async function handleAuth(e) {
                 errorDiv.className = 'form-success';
                 errorDiv.textContent = registration.detail || 'Account created successfully! Please sign in below.';
             } else if (registration.verification_email_sent === false) {
-                // Account saved but email delivery failed — let user resend
-                errorDiv.className = 'form-success';
-                errorDiv.innerHTML = `${registration.detail || 'Account created, but the verification email could not be sent.'}
-                    <br><a href="#" style="color:var(--primary); font-weight:600;" onclick="resendVerificationEmail('${email}'); return false;">Resend verification email &rarr;</a>`;
+                // Account saved but email delivery failed
+                errorDiv.className = 'form-error';
+                errorDiv.textContent = registration.detail || 'Account created, but the verification email could not be sent.';
             } else {
-                errorDiv.className = 'form-success';
-                errorDiv.textContent = registration.detail || 'Account created! Please check your email to verify your account before signing in.';
+                showToast('Account created. OTP sent to your email.');
+                navigateTo('otp');
+                setTimeout(() => {
+                    const otpEmailEl = document.getElementById('otp-email');
+                    if (otpEmailEl) otpEmailEl.value = email;
+                }, 100);
             }
             return;
         }
@@ -419,7 +431,7 @@ async function handleAuth(e) {
             const needsVerify = msg.toLowerCase().includes('verify');
             if (needsVerify) {
                 errorDiv.className = 'form-error';
-                errorDiv.innerHTML = `${msg}<br><a href="#" style="color:var(--primary); font-weight:600;" onclick="resendVerificationEmail('${email}'); return false;">Resend verification email &rarr;</a>`;
+                errorDiv.innerHTML = `${msg}<br><a href="#" style="color:var(--primary); font-weight:600;" onclick="navigateTo('otp'); setTimeout(() => { document.getElementById('otp-email').value = '${email}'; }, 100); return false;">Verify OTP &rarr;</a>`;
             } else {
                 throw new Error(msg);
             }
@@ -443,6 +455,10 @@ async function handleAuth(e) {
         }
 
         showToast(`Welcome back, ${email.split('@')[0]}!`);
+        if (state.role === 'admin') {
+            window.location.href = '/admin.html';
+            return;
+        }
         navigateTo(state.role === 'candidate' ? 'candidate-dashboard' : 'recruiter-dashboard');
     } catch (err) {
         errorDiv.className = 'form-error';
@@ -452,24 +468,44 @@ async function handleAuth(e) {
     }
 }
 
-async function resendVerificationEmail(email) {
-    const errorDiv = document.getElementById('auth-error');
-    if (!email) {
-        email = document.getElementById('auth-email')?.value;
-    }
-    if (!email) return;
+async function handleVerifyOTP(e) {
+    e.preventDefault();
+    const email = document.getElementById('otp-email').value;
+    const otp = document.getElementById('otp-code').value;
+    const errorDiv = document.getElementById('otp-error');
+    const submitBtn = document.getElementById('otp-submit');
+
+    submitBtn.disabled = true;
+    errorDiv.className = 'form-error';
+    errorDiv.innerHTML = '';
+
     try {
-        await apiCall('/auth/resend-verification', 'POST', { email });
-        errorDiv.className = 'form-success';
-        errorDiv.textContent = 'Verification email sent! Please check your inbox (and spam folder).';
-    } catch (err) {
-        if (err.message && err.message.includes('429')) {
-            errorDiv.className = 'form-error';
-            errorDiv.textContent = 'Too many requests — please wait a few minutes before requesting another email.';
-        } else {
-            errorDiv.className = 'form-error';
-            errorDiv.textContent = 'Could not resend email. Please try again later.';
+        const res = await fetch(`${API_URL}/auth/verify-email`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, otp })
+        });
+        
+        let data;
+        try { data = await res.json(); } catch(_) { data = {}; }
+
+        if (!res.ok) {
+            throw new Error(data.detail || 'Invalid OTP');
         }
+
+        showToast('Email verified successfully.');
+        navigateTo('login');
+        
+        setTimeout(() => {
+            const authEmailEl = document.getElementById('auth-email');
+            if (authEmailEl) authEmailEl.value = email;
+            switchAuthTab('login');
+        }, 100);
+    } catch (err) {
+        errorDiv.className = 'form-error';
+        errorDiv.textContent = err.message || 'OTP verification failed';
+    } finally {
+        submitBtn.disabled = false;
     }
 }
 

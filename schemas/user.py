@@ -16,6 +16,9 @@ class UserLogin(BaseModel):
 
     password: str
 
+class OTPVerify(BaseModel):
+    email: EmailStr
+    otp: str
 
 class UserResponse(BaseModel):
 

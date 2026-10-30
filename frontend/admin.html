@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RecruitAI — Admin Dashboard</title>
+    <meta name="description" content="RecruitAI admin dashboard for managing users, jobs, system health, and audit logs." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/admin.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+<!-- ====================== SIDEBAR ====================== -->
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+        <div class="brand-icon">⚡</div>
+        <div class="brand-text">
+            <span class="brand-name">RecruitAI</span>
+            <span class="brand-badge">Admin</span>
+        </div>
+    </div>
+
+    <nav class="sidebar-nav">
+        <div class="nav-section-label">Overview</div>
+        <a class="nav-item active" data-view="dashboard" id="nav-dashboard" href="#dashboard">
+            <span class="nav-icon">📊</span>
+            <span class="nav-label">Dashboard</span>
+        </a>
+
+        <div class="nav-section-label">Management</div>
+        <a class="nav-item" data-view="users" id="nav-users" href="#users">
+            <span class="nav-icon">👥</span>
+            <span class="nav-label">Users</span>
+        </a>
+        <a class="nav-item" data-view="jobs" id="nav-jobs" href="#jobs">
+            <span class="nav-icon">💼</span>
+            <span class="nav-label">Jobs</span>
+        </a>
+
+        <div class="nav-section-label">System</div>
+        <a class="nav-item" data-view="health" id="nav-health" href="#health">
+            <span class="nav-icon">❤️</span>
+            <span class="nav-label">System Health</span>
+        </a>
+        <a class="nav-item" data-view="audit" id="nav-audit" href="#audit">
+            <span class="nav-icon">📋</span>
+            <span class="nav-label">Audit Logs</span>
+        </a>
+    </nav>
+
+    <div class="sidebar-footer">
+        <div class="admin-info" id="admin-info">
+            <div class="admin-avatar" id="admin-avatar">A</div>
+            <div class="admin-meta">
+                <div class="admin-email" id="admin-email">Loading...</div>
+                <div class="admin-role">Administrator</div>
+            </div>
+        </div>
+        <button class="logout-btn" id="logout-btn" onclick="adminLogout()">
+            <span>🚪</span> Logout
+        </button>
+    </div>
+</aside>
+
+<!-- ====================== MAIN ====================== -->
+<main class="main-content" id="main-content">
+
+    <!-- Top Bar -->
+    <header class="topbar">
+        <button class="sidebar-toggle" onclick="toggleSidebar()" aria-label="Toggle Sidebar">☰</button>
+        <div class="topbar-title" id="topbar-title">Dashboard</div>
+        <div class="topbar-actions">
+            <div class="refresh-indicator" id="refresh-indicator"></div>
+            <button class="btn btn-ghost" id="refresh-btn" onclick="refreshCurrentView()">🔄 Refresh</button>
+        </div>
+    </header>
+
+    <!-- ========== DASHBOARD VIEW ========== -->
+    <section class="view" id="view-dashboard">
+        <div class="view-header">
+            <h1>Overview</h1>
+            <p class="view-subtitle">Real-time platform statistics</p>
+        </div>
+
+        <!-- KPI Cards -->
+        <div class="kpi-grid" id="kpi-grid">
+            <div class="kpi-card skeleton" id="kpi-total-users">
+                <div class="kpi-icon">👤</div>
+                <div class="kpi-body">
+                    <div class="kpi-value" id="kpi-val-users">—</div>
+                    <div class="kpi-label">Total Users</div>
+                </div>
+                <div class="kpi-sub" id="kpi-sub-users"></div>
+            </div>
+            <div class="kpi-card skeleton" id="kpi-verified">
+                <div class="kpi-icon">✅</div>
+                <div class="kpi-body">
+                    <div class="kpi-value" id="kpi-val-verified">—</div>
+                    <div class="kpi-label">Verified Users</div>
+                </div>
+                <div class="kpi-sub" id="kpi-sub-verified"></div>
+            </div>
+            <div class="kpi-card skeleton" id="kpi-jobs">
+                <div class="kpi-icon">💼</div>
+                <div class="kpi-body">
+                    <div class="kpi-value" id="kpi-val-jobs">—</div>
+                    <div class="kpi-label">Total Jobs</div>
+                </div>
+                <div class="kpi-sub" id="kpi-sub-jobs"></div>
+            </div>
+            <div class="kpi-card skeleton" id="kpi-apps">
+                <div class="kpi-icon">📄</div>
+                <div class="kpi-body">
+                    <div class="kpi-value" id="kpi-val-apps">—</div>
+                    <div class="kpi-label">Applications</div>
+                </div>
+                <div class="kpi-sub" id="kpi-sub-apps"></div>
+            </div>
+            <div class="kpi-card skeleton" id="kpi-candidates">
+                <div class="kpi-icon">🎓</div>
+                <div class="kpi-body">
+                    <div class="kpi-value" id="kpi-val-candidates">—</div>
+                    <div class="kpi-label">Candidates</div>
+                </div>
+                <div class="kpi-sub" id="kpi-sub-candidates"></div>
+            </div>
+            <div class="kpi-card skeleton" id="kpi-new-today">
+                <div class="kpi-icon">🆕</div>
+                <div class="kpi-body">
+                    <div class="kpi-value" id="kpi-val-new-today">—</div>
+                    <div class="kpi-label">New Today</div>
+                </div>
+                <div class="kpi-sub" id="kpi-sub-new-today"></div>
+            </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="charts-grid">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3>User Registrations</h3>
+                    <span class="chart-sub">Last 30 days</span>
+                </div>
+                <canvas id="chart-registrations"></canvas>
+            </div>
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3>Role Distribution</h3>
+                    <span class="chart-sub">By user type</span>
+                </div>
+                <canvas id="chart-roles"></canvas>
+            </div>
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3>Jobs by Source</h3>
+                    <span class="chart-sub">Aggregation breakdown</span>
+                </div>
+                <canvas id="chart-sources"></canvas>
+            </div>
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3>Verification Status</h3>
+                    <span class="chart-sub">Email verification rate</span>
+                </div>
+                <canvas id="chart-verification"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== USERS VIEW ========== -->
+    <section class="view hidden" id="view-users">
+        <div class="view-header">
+            <h1>User Management</h1>
+            <p class="view-subtitle">Search, filter, verify or delete user accounts</p>
+        </div>
+
+        <div class="toolbar">
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="user-search" class="search-input" placeholder="Search by email..." oninput="debounceUserSearch()" />
+            </div>
+            <div class="filter-group">
+                <select id="user-role-filter" class="filter-select" onchange="loadUsers()">
+                    <option value="">All Roles</option>
+                    <option value="candidate">Candidate</option>
+                    <option value="recruiter">Recruiter</option>
+                    <option value="admin">Admin</option>
+                </select>
+                <select id="user-verified-filter" class="filter-select" onchange="loadUsers()">
+                    <option value="">All Status</option>
+                    <option value="true">Verified</option>
+                    <option value="false">Unverified</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table class="data-table" id="users-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th>Joined</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="users-tbody"></tbody>
+            </table>
+            <div class="empty-state hidden" id="users-empty">
+                <span>👤</span>
+                <p>No users found</p>
+            </div>
+            <div class="table-loader hidden" id="users-loader">Loading users...</div>
+        </div>
+
+        <div class="pagination" id="users-pagination"></div>
+    </section>
+
+    <!-- ========== JOBS VIEW ========== -->
+    <section class="view hidden" id="view-jobs">
+        <div class="view-header">
+            <h1>Job Management</h1>
+            <p class="view-subtitle">Monitor and manage all job listings</p>
+        </div>
+
+        <!-- Job Stats Bar -->
+        <div class="stats-bar" id="job-stats-bar">
+            <div class="stat-chip" id="stat-total-jobs">Total: —</div>
+            <div class="stat-chip" id="stat-internal-jobs">Internal: —</div>
+            <div class="stat-chip" id="stat-agg-jobs">Aggregated: —</div>
+        </div>
+
+        <div class="toolbar">
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="job-search" class="search-input" placeholder="Search title or company..." oninput="debounceJobSearch()" />
+            </div>
+            <div class="filter-group">
+                <select id="job-source-filter" class="filter-select" onchange="loadJobs()">
+                    <option value="">All Sources</option>
+                    <option value="internal">Internal</option>
+                    <option value="remoteok">RemoteOK</option>
+                    <option value="greenhouse">Greenhouse</option>
+                    <option value="lever">Lever</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table class="data-table" id="jobs-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Title</th>
+                        <th>Company</th>
+                        <th>Location</th>
+                        <th>Source</th>
+                        <th>Type</th>
+                        <th>Posted</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="jobs-tbody"></tbody>
+            </table>
+            <div class="empty-state hidden" id="jobs-empty">
+                <span>💼</span>
+                <p>No jobs found</p>
+            </div>
+            <div class="table-loader hidden" id="jobs-loader">Loading jobs...</div>
+        </div>
+
+        <div class="pagination" id="jobs-pagination"></div>
+    </section>
+
+    <!-- ========== SYSTEM HEALTH VIEW ========== -->
+    <section class="view hidden" id="view-health">
+        <div class="view-header">
+            <h1>System Health</h1>
+            <p class="view-subtitle">Real-time status of all connected services</p>
+        </div>
+
+        <div class="health-overall" id="health-overall">
+            <div class="health-badge" id="health-badge">Checking...</div>
+        </div>
+
+        <div class="health-grid" id="health-grid">
+            <!-- Populated dynamically -->
+        </div>
+    </section>
+
+    <!-- ========== AUDIT LOGS VIEW ========== -->
+    <section class="view hidden" id="view-audit">
+        <div class="view-header">
+            <h1>Audit Logs</h1>
+            <p class="view-subtitle">All admin actions are recorded here</p>
+        </div>
+
+        <div class="table-container">
+            <table class="data-table" id="audit-table">
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Admin</th>
+                        <th>Action</th>
+                        <th>Resource</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="audit-tbody"></tbody>
+            </table>
+            <div class="empty-state hidden" id="audit-empty">
+                <span>📋</span>
+                <p>No audit logs yet</p>
+            </div>
+            <div class="table-loader hidden" id="audit-loader">Loading logs...</div>
+        </div>
+
+        <div class="pagination" id="audit-pagination"></div>
+    </section>
+
+</main>
+
+<!-- ========== USER DETAIL MODAL ========== -->
+<div class="modal-overlay hidden" id="user-modal-overlay" onclick="closeUserModal()">
+    <div class="modal" onclick="event.stopPropagation()">
+        <div class="modal-header">
+            <h2 id="modal-user-title">User Detail</h2>
+            <button class="modal-close" onclick="closeUserModal()">✕</button>
+        </div>
+        <div class="modal-body" id="modal-user-body">Loading...</div>
+        <div class="modal-footer">
+            <button class="btn btn-ghost" onclick="closeUserModal()">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- ========== TOAST ========== -->
+<div class="toast-container" id="toast-container"></div>
+
+<!-- ========== AUTH GUARD ========== -->
+<div class="auth-guard hidden" id="auth-guard">
+    <div class="auth-guard-box">
+        <div class="auth-guard-icon">🔒</div>
+        <h2>Admin Access Required</h2>
+        <p>You must be logged in as an administrator to view this page.</p>
+        <a href="/" class="btn btn-primary">← Back to App</a>
+    </div>
+</div>
+
+<script src="/admin.js"></script>
+</body>
+</html>

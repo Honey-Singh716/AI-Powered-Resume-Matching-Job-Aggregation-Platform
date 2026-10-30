@@ -1,58 +1,101 @@
 import logging
 from fastapi import HTTPException
 
-# Use the extended repository with verification helpers
-from repositories.user_repo_ext import create_user, get_user_by_email, set_verification_token
-from services.auth_service import hash_password,verify_password,create_access_token
+from repositories.user_repo_ext import (
+    create_user,
+    get_user_by_email,
+    set_verification_token
+)
+
+from services.auth_service import (
+    hash_password,
+    verify_password,
+    create_access_token
+)
+
 from services.email_service import send_verification_email
 
 import secrets
 import hashlib
 from datetime import datetime, timedelta, timezone
-import os
 
 logger = logging.getLogger(__name__)
 
-# ---------------------------------------------------------------
-# TODO: Set this to True once you have a verified email domain
-#       and a working RESEND_API_KEY configured in .env
-# ---------------------------------------------------------------
-EMAIL_VERIFICATION_ENABLED = False
+# OTP verification enabled
+EMAIL_VERIFICATION_ENABLED = True
 
 
 def save_user(user_data, db):
 
     email = user_data.email
+
     existing_user = get_user_by_email(email, db)
 
     if existing_user:
-        raise HTTPException(status_code=400, detail="User with this email already exists")
+        raise HTTPException(
+            status_code=400,
+            detail="User with this email already exists"
+        )
 
     password = user_data.password
     hashed_password = hash_password(password)
     role = user_data.role
 
-    # Create user — is_verified starts as False in DB
-    user = create_user(email, hashed_password, role, db)
+    # Create user
+    user = create_user(
+        email,
+        hashed_password,
+        role,
+        db
+    )
 
     if EMAIL_VERIFICATION_ENABLED:
-        # --- Email verification pipeline (enable when domain is ready) ---
-        raw_token = secrets.token_urlsafe(32)
-        token_hash = hashlib.sha256(raw_token.encode()).hexdigest()
-        expires_at = datetime.now(timezone.utc) + timedelta(minutes=30)
-        sent_at = datetime.now(timezone.utc)
 
-        set_verification_token(user, token_hash, expires_at, sent_at, db)
+        # -----------------------------------------
+        # Generate secure 6-digit OTP
+        # -----------------------------------------
+
+        otp = f"{secrets.randbelow(1_000_000):06d}"
+
+        # Store only hash of OTP
+        otp_hash = hashlib.sha256(
+            otp.encode()
+        ).hexdigest()
+
+        # OTP valid for 5 minutes
+        now = datetime.now(timezone.utc)
+
+        expires_at = now + timedelta(minutes=5)
+
+        set_verification_token(
+            user,
+            otp_hash,
+            expires_at,
+            now,
+            db
+        )
 
         try:
-            send_verification_email(user.email, raw_token, expires_at)
+
+            # Send OTP through n8n
+            send_verification_email(
+                user.email,
+                otp,
+                expires_at
+            )
+
         except Exception:
-            logger.exception("Failed to send verification email during signup for %s", user.email)
+
+            logger.exception(
+                "Failed to send OTP email for %s",
+                user.email
+            )
+
             return {
                 "id": user.id,
                 "email": user.email,
                 "role": user.role,
-                "detail": "Account created, but verification email could not be sent right now. Please try resending the verification email later.",
+                "detail": "Account created, but OTP email could not be sent.",
                 "verification_email_sent": False,
             }
 
@@ -60,38 +103,56 @@ def save_user(user_data, db):
             "id": user.id,
             "email": user.email,
             "role": user.role,
-            "detail": "Account created. Verification email sent.",
+            "detail": "Account created. OTP sent to your email.",
             "verification_email_sent": True,
+            "verified": False
         }
-    else:
-        # --- Bypass: auto-verify the user so they can login immediately ---
-        user.is_verified = True
-        db.commit()
-        logger.info("Email verification bypassed for %s (EMAIL_VERIFICATION_ENABLED=False)", user.email)
-        return {
-            "id": user.id,
-            "email": user.email,
-            "role": user.role,
-            "detail": "Account created successfully! You can now sign in.",
-            "verification_email_sent": False,
-            "verified": True,
-        }
+
+    # Should not normally be used now
+    user.is_verified = True
+    db.commit()
+
+    return {
+        "id": user.id,
+        "email": user.email,
+        "role": user.role,
+        "detail": "Account created successfully.",
+        "verification_email_sent": False,
+        "verified": True
+    }
 
 
 def login_user(login_data, db):
 
-    user = get_user_by_email(login_data.email, db)
+    user = get_user_by_email(
+        login_data.email,
+        db
+    )
 
     if not user:
-        raise HTTPException(status_code=401, detail="Invalid email or password")
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid email or password"
+        )
 
-    if not verify_password(login_data.password, user.password):
-        raise HTTPException(status_code=401, detail="Invalid email or password")
+    if not verify_password(
+        login_data.password,
+        user.password
+    ):
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid email or password"
+        )
 
+    # Email MUST be verified
     if EMAIL_VERIFICATION_ENABLED:
-        # Block unverified users only when verification is active
-        if not getattr(user, 'is_verified', False):
-            raise HTTPException(status_code=403, detail="Please verify your email before logging in.")
+
+        if not getattr(user, "is_verified", False):
+
+            raise HTTPException(
+                status_code=403,
+                detail="Please verify your email before logging in."
+            )
 
     token = create_access_token({
         "sub": user.email,
@@ -101,4 +162,4 @@ def login_user(login_data, db):
     return {
         "access_token": token,
         "token_type": "bearer"
-    }
+    }

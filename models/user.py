@@ -3,6 +3,7 @@ from sqlalchemy import Integer
 from sqlalchemy import String
 from sqlalchemy import Boolean
 from sqlalchemy import DateTime
+from sqlalchemy.sql import func
 
 from database import Base
 from datetime import datetime
@@ -56,3 +57,9 @@ class User(Base):
         DateTime,
         nullable=True
     )
+
+    created_at = Column(
+        DateTime,
+        server_default=func.now(),
+        nullable=True,
+    )

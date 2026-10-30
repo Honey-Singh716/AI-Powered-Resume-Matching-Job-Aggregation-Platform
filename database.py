@@ -40,6 +40,7 @@ def ensure_user_verification_columns():
             "verification_token_hash": "VARCHAR(255)",
             "verification_token_expires_at": "TIMESTAMP WITH TIME ZONE",
             "verification_token_sent_at": "TIMESTAMP WITH TIME ZONE",
+            "created_at": "TIMESTAMP WITH TIME ZONE DEFAULT NOW()",
         }
 
         with engine.begin() as conn:

@@ -194,6 +194,39 @@
         </div>
     </template>
 
+    <!-- OTP VERIFICATION -->
+    <template id="view-otp">
+        <div class="auth-page">
+            <div class="auth-card">
+                <div style="text-align:center; margin-bottom: var(--space-6);">
+                    <div class="sidebar-logo" style="justify-content:center; margin-bottom: var(--space-4);">
+                        <div class="sidebar-logo-icon"></div>
+                        <span class="sidebar-logo-text">RecruitAI</span>
+                    </div>
+                    <h1>Verify your email</h1>
+                    <p class="subtitle" style="margin-bottom:0;">We sent a 6-digit OTP to your email.</p>
+                </div>
+
+                <form id="otp-form" onsubmit="handleVerifyOTP(event)">
+                    <div class="form-group">
+                        <label for="otp-email">Email</label>
+                        <input type="email" id="otp-email" class="form-input" required readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="otp-code">6-digit OTP</label>
+                        <input type="text" id="otp-code" class="form-input" required pattern="\d{6}" maxlength="6" placeholder="123456" style="text-align:center; letter-spacing: 0.5em; font-size: 1.2rem;">
+                    </div>
+
+                    <div id="otp-error" class="form-error"></div>
+
+                    <button type="submit" class="btn btn-primary btn-lg btn-full" id="otp-submit" style="margin-top: var(--space-4);">
+                        Verify OTP
+                    </button>
+                </form>
+            </div>
+        </div>
+    </template>
+
     <!-- CANDIDATE DASHBOARD -->
     <template id="view-candidate-dashboard">
         <div class="fade-in">
