@@ -1,0 +1,58 @@
+##############################################################################
+# render.yaml — Infrastructure-as-code for Render.com deployment
+#
+# Deploy with:  render blueprint apply
+# Or connect this repo in the Render dashboard → "New Web Service"
+##############################################################################
+
+services:
+  - type: web
+    name: ai-resume-matcher-backend
+    runtime: python
+    region: oregon          # Change to match your preferred region
+    plan: free              # Upgrade to "starter" or higher for production SLAs
+
+    # ── Build ─────────────────────────────────────────────────────────────────
+    buildCommand: pip install -r requirements.txt
+
+    # ── Start ─────────────────────────────────────────────────────────────────
+    # Render injects $PORT automatically (usually 10000).
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+
+    # ── Health check ──────────────────────────────────────────────────────────
+    # Render uses this to determine when the service is ready and to restart
+    # unhealthy instances.  No auth required — public endpoint.
+    healthCheckPath: /api/health
+
+    # ── Environment variables ─────────────────────────────────────────────────
+    # Set these in the Render dashboard (Settings → Environment) or via the CLI.
+    # Do NOT commit real secret values here.
+    envVars:
+      - key: DATABASE_URL
+        sync: false          # Set manually in dashboard
+
+      - key: SECRET_KEY
+        generateValue: true  # Render generates a secure random value on first deploy
+
+      - key: GROQ_API_KEY
+        sync: false          # Set manually in dashboard
+
+      - key: GROQ_MODEL
+        value: llama-3.3-70b-versatile
+
+      - key: REDIS_URL
+        sync: false          # Set manually; point to Render Redis or Upstash
+
+      - key: RESEND_API_KEY
+        sync: false          # Set manually
+
+      - key: EMAIL_FROM
+        sync: false          # Set manually (e.g. noreply@yourdomain.com)
+
+      - key: FRONTEND_URL
+        sync: false          # e.g. https://your-frontend.vercel.app
+
+      # CORS_ORIGINS must include your frontend domain(s), comma-separated.
+      # Example: https://your-app.vercel.app,https://your-custom-domain.com
+      - key: CORS_ORIGINS
+        sync: false

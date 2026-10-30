@@ -22,9 +22,14 @@ from route.user_route import router as user_router
 from route.auth_route import router as auth_router
 from route.application_routes import router as application_router
 from route.job_routes import router as job_router
+# admin_router is the master router that aggregates all admin sub-routers.
+# admin_routes.router (the flat route module) is already included inside admin.router,
+# so we must NOT register admin_routes.router a second time here.
+from admin.router import router as admin_router
 
 from models.user import User
 from models.application import Application
+from models.audit_log import AdminAuditLog
 
 
 from database import Base
@@ -57,8 +62,30 @@ logging.basicConfig(level=logging.INFO)
 
 
 
-@app.get("/health")
-def health_check():
+@app.get("/api/health", tags=["Health"])
+def health_check_get():
+    """
+    Lightweight public health check — GET variant.
+    Returns HTTP 200 + JSON body.  No auth required.
+    Used by UptimeRobot and any HTTP(s) monitor that sends GET.
+    """
+    return {"status": "healthy"}
+
+
+@app.head("/api/health", tags=["Health"])
+def health_check_head():
+    """
+    Lightweight public health check — HEAD variant.
+    Returns HTTP 200 with correct headers and an empty body.
+    UptimeRobot sometimes sends HEAD; this ensures it also works.
+    """
+    # FastAPI automatically strips the body for HEAD responses.
+    return {"status": "healthy"}
+
+
+# Legacy root health check kept for backwards compatibility.
+@app.get("/health", include_in_schema=False)
+def health_check_legacy():
     return {"status": "ok"}
 
 # CORS: read allowed origins from env, default to localhost for development
@@ -98,6 +125,9 @@ app.include_router(
 )
 app.include_router(
     job_router
+)
+app.include_router(
+    admin_router
 )
 
 # Create frontend directory if it doesn't exist
