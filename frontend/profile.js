@@ -182,6 +182,7 @@ function pfApplyAccount(account, options = {}) {
         });
     }
     profileEditor.draft = next;
+    state.fullName = (account.full_name || '').trim();
     state.email = account.email || state.email;
     if (state.email) localStorage.setItem('email', state.email);
     if (account.access_token) {

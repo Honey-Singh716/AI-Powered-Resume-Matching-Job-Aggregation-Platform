@@ -239,6 +239,7 @@ function updateAppShell(viewId) {
         topbar.classList.remove('hidden');
         chatToggle.classList.add('hidden');
         renderTopbar(viewId);
+        loadAccountIdentity();
     } else {
         sidebar.style.display = 'none';
         sidebar.innerHTML = '';
@@ -406,7 +407,7 @@ function renderSidebar(activeView) {
 
 function renderTopbar(viewId) {
     const topbar = document.getElementById('topbar');
-    const userInitial = (state.email || 'User').charAt(0).toUpperCase();
+    const userInitial = (accountDisplayName() || state.email || 'User').charAt(0).toUpperCase();
 
     topbar.innerHTML = `
         <div class="cm-topbar-left">
@@ -632,9 +633,13 @@ async function handleAuth(e) {
             try {
                 state.applicationsCache = await apiCall('/my-applications');
             } catch(err) {}
+            try {
+                const account = await apiCall('/users/me');
+                state.fullName = (account.full_name || '').trim();
+            } catch(err) {}
         }
 
-        showToast(`Welcome back, ${email.split('@')[0]}!`);
+        showToast(`Welcome back, ${accountDisplayName() || email.split('@')[0]}!`);
         if (state.role === 'admin') {
             window.location.href = '/admin.html';
             return;
@@ -1157,10 +1162,10 @@ function resetLandingUploadZone() {
 
 // --- Candidate Dashboard ---
 async function initCandidateDashboard() {
-    const emailPrefix = state.email ? state.email.split('@')[0] : 'Ritik';
-    const capName = emailPrefix.charAt(0).toUpperCase() + emailPrefix.slice(1);
     const nameEl = document.getElementById('dash-user-name');
-    if (nameEl) nameEl.textContent = capName;
+    const knownName = accountDisplayName();
+    if (nameEl && knownName) nameEl.textContent = knownName;
+    await loadAccountIdentity();
 
     await loadCandidateProfile();
     loadDashboardStats();
