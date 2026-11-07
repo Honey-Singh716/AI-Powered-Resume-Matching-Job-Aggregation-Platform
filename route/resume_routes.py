@@ -6,7 +6,9 @@ from database import get_db
 from services.auth_service import current_user
 from services.candidate_service import save_candidate
 from services.ai_service import parse_resume
+from services.profile_service import clean_resume_filename, remember_parsed_resume, update_profile
 from repositories.candidate_repo import search_candidates
+from schemas.profile import ProfileUpdate
 
 from PyPDF2 import PdfReader
 import io
@@ -36,6 +38,7 @@ def resume_parser(
     )
 
     candidate = save_candidate(result,current_user.id,db)
+    remember_parsed_resume(current_user, candidate, db)
 
     return {
         "id": candidate.id,
@@ -91,6 +94,12 @@ def upload_resume(
     # Save candidate to DB
     try:
         candidate = save_candidate(result, current_user.id, db)
+        remember_parsed_resume(
+            current_user,
+            candidate,
+            db,
+            filename=clean_resume_filename(file.filename or "resume.pdf"),
+        )
     except HTTPException:
         raise
     except Exception as e:
@@ -124,7 +133,14 @@ def get_my_profile(
     }
 
 
-
+@router.put("/my-profile")
+def update_my_profile(
+    payload: ProfileUpdate,
+    db: Session = Depends(get_db),
+    user=Depends(current_user),
+):
+    """Save profile edits. Every section is optional except a valid account email."""
+    return update_profile(user, payload, db)
 
 
 @router.get("/candidates/search")

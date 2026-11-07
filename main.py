@@ -28,6 +28,7 @@ from route.job_routes import router as job_router
 from admin.router import router as admin_router
 
 from models.user import User
+from models.user_profile import UserProfile
 from models.application import Application
 from models.audit_log import AdminAuditLog
 

@@ -8,7 +8,7 @@
     <meta name="description" content="Upload your resume and get AI-powered job recommendations, skills analysis, and career insights. Find your perfect match.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,500;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/styles.css">
 </head>
 
@@ -32,336 +32,1564 @@
 
     <!-- LANDING PAGE -->
     <template id="view-landing">
-        <div class="landing-page">
-            <!-- Landing Nav -->
-            <nav class="landing-nav">
-                <div class="landing-nav-inner">
-                    <div class="sidebar-logo">
-                        <div class="sidebar-logo-icon"></div>
-                        <span class="sidebar-logo-text">RecruitAI</span>
+        <div class="landing-page ci-editorial-theme">
+            <!-- Ambient Background Elements (Warm Workspace Lighting, Botanical Accents & Natural Contours) -->
+            <div class="ci-workspace-ambiance" aria-hidden="true">
+                <div class="ci-ambient-light"></div>
+                <div class="ci-window-beam"></div>
+                <!-- Botanical greenery accents framing corners -->
+                <svg class="ci-foliage ci-foliage-tr" viewBox="0 0 340 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M340 0 C280 40, 220 90, 210 170 C200 240, 240 290, 320 320" stroke="#123B2F" stroke-width="2.5" stroke-linecap="round" opacity="0.32"/>
+                    <path d="M210 170 C160 140, 140 100, 150 60 C180 80, 200 120, 210 170 Z" fill="#123B2F" opacity="0.2"/>
+                    <path d="M225 125 C190 90, 190 40, 210 10 C230 40, 235 90, 225 125 Z" fill="#A9BDA9" opacity="0.42"/>
+                    <path d="M250 80 C230 40, 250 10, 280 0 C290 30, 280 60, 250 80 Z" fill="#123B2F" opacity="0.25"/>
+                    <path d="M220 220 C170 210, 140 180, 135 140 C165 155, 195 185, 220 220 Z" fill="#A9BDA9" opacity="0.35"/>
+                    <path d="M255 260 C210 265, 185 245, 175 215 C205 220, 235 240, 255 260 Z" fill="#123B2F" opacity="0.18"/>
+                </svg>
+                <svg class="ci-foliage ci-foliage-bl" viewBox="0 0 320 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0 300 C60 260, 110 210, 130 140 C145 80, 110 30, 40 0" stroke="#123B2F" stroke-width="2.5" stroke-linecap="round" opacity="0.28"/>
+                    <path d="M130 140 C175 165, 190 205, 180 240 C150 220, 135 185, 130 140 Z" fill="#123B2F" opacity="0.18"/>
+                    <path d="M115 190 C150 225, 150 270, 135 295 C115 265, 110 220, 115 190 Z" fill="#A9BDA9" opacity="0.4"/>
+                    <path d="M95 100 C140 105, 165 85, 170 55 C145 60, 115 75, 95 100 Z" fill="#A9BDA9" opacity="0.3"/>
+                </svg>
+                <!-- Subtle organic contour waves -->
+                <svg class="ci-contour-ribbon" viewBox="0 0 1440 600" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M 0 380 C 350 280, 750 490, 1150 340 C 1300 280, 1400 300, 1440 320" stroke="#A9BDA9" stroke-width="1.8" stroke-dasharray="8 8" opacity="0.35"/>
+                    <path d="M 0 440 C 400 340, 850 540, 1250 400 C 1370 360, 1420 370, 1440 380" stroke="#DDD4C2" stroke-width="1.5" opacity="0.45"/>
+                </svg>
+            </div>
+
+            <!-- Top Navigation -->
+            <nav class="ci-nav">
+                <div class="ci-nav-inner">
+                    <a href="#landing-hero" class="ci-brand-link">
+                        <div class="ci-brand-icon">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                                <rect width="24" height="24" rx="6" fill="#123B2F"/>
+                                <path d="M6 16.5C8.5 14 11 11.5 18 7.5C14 14.5 11.5 17 9 19.5" stroke="#F5F2E9" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <circle cx="8" cy="18" r="1.5" fill="#A9BDA9"/>
+                            </svg>
+                        </div>
+                        <span class="ci-brand-text">Recruit<span class="ci-brand-ai">AI</span></span>
+                        <span class="ci-brand-tag">Intelligence</span>
+                    </a>
+
+                    <div class="ci-nav-center">
+                        <a href="#how-it-works" class="ci-nav-item">How It Works</a>
+                        <a href="#about-section" class="ci-nav-item">About</a>
+                        <a href="#contact-section" class="ci-nav-item">Contact</a>
                     </div>
-                    <div class="landing-nav-links">
-                        <button class="btn btn-ghost" onclick="toggleTheme()" title="Toggle Dark/Light Mode" style="font-size: 1.2rem; padding: 0 var(--space-2);">🌓</button>
-                        <button class="btn btn-ghost" onclick="navigateTo('login')">Log In</button>
-                        <button class="btn btn-primary" onclick="navigateTo('login')">Get Started</button>
+
+                    <div class="ci-nav-actions">
+                        <button class="ci-btn-ghost" onclick="navigateTo('login')">Sign In</button>
+                        <button class="ci-btn-primary ci-btn-nav" onclick="navigateTo('login')">
+                            <span>Get Started</span>
+                        </button>
+                        <button class="ci-mobile-toggle" onclick="toggleMobileLandingNav()" aria-label="Toggle navigation">
+                            <span></span><span></span><span></span>
+                        </button>
+                    </div>
+                </div>
+                <!-- Mobile Navigation Dropdown -->
+                <div class="ci-mobile-menu" id="ci-mobile-menu">
+                    <a href="#how-it-works" onclick="closeMobileLandingNav()">How It Works</a>
+                    <a href="#about-section" onclick="closeMobileLandingNav()">About</a>
+                    <a href="#contact-section" onclick="closeMobileLandingNav()">Contact</a>
+                    <div class="ci-mobile-menu-actions">
+                        <button class="ci-btn-ghost btn-full" onclick="closeMobileLandingNav(); navigateTo('login')">Sign In</button>
+                        <button class="ci-btn-primary btn-full" onclick="closeMobileLandingNav(); navigateTo('login')">Get Started Free</button>
                     </div>
                 </div>
             </nav>
 
-            <!-- Hero -->
-            <section class="hero" id="landing-hero">
-                <div class="hero-badge">
-                    <span></span>
-                    <span>AI-Powered Career Matching</span>
+            <!-- 1. Hero Section -->
+            <section class="ci-hero-section" id="landing-hero">
+                <input type="file" id="landing-upload-input" accept=".pdf" style="display:none;" onchange="handleLandingUpload(event)">
+                <div id="landing-upload-status" style="display:none;"></div>
+
+                <div class="ci-container ci-hero-grid">
+                    <!-- Left Column: Copy & Actions -->
+                    <div class="ci-hero-col-left">
+                        <div class="ci-pill-badge">
+                            <svg class="ci-badge-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                                <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                            </svg>
+                            <span>AI-POWERED CAREER INTELLIGENCE</span>
+                        </div>
+
+                        <h1 class="ci-hero-title">
+                            Find the Right Opportunities.
+                            <span class="ci-serif-accent">Let Your Skills Lead.</span>
+                        </h1>
+
+                        <p class="ci-hero-subtitle">
+                            Upload your resume, get AI-driven job matches, skill gap insights, and personalized recommendations — all calibrated to your unique background and real market demand.
+                        </p>
+
+                        <div class="ci-hero-actions">
+                            <button class="ci-btn-primary ci-btn-hero" onclick="triggerHeroUpload()">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                    <polyline points="17 8 12 3 7 8"></polyline>
+                                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                                </svg>
+                                <span>Upload Your Resume</span>
+                            </button>
+                            <button class="ci-btn-secondary ci-btn-hero" onclick="navigateTo('login')">
+                                <span>Get Started Free &rarr;</span>
+                            </button>
+                        </div>
+
+                        <div class="ci-hero-highlights">
+                            <div class="ci-highlight-item">
+                                <span class="ci-highlight-dot"></span>
+                                <span>Resume Intelligence</span>
+                            </div>
+                            <span class="ci-highlight-sep">|</span>
+                            <div class="ci-highlight-item">
+                                <span class="ci-highlight-dot"></span>
+                                <span>Semantic Job Matching</span>
+                            </div>
+                            <span class="ci-highlight-sep">|</span>
+                            <div class="ci-highlight-item">
+                                <span class="ci-highlight-dot"></span>
+                                <span>Skill Gap Analysis</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Product Showcase UI (Reference Image Matching) -->
+                    <div class="ci-hero-col-right">
+                        <div class="ci-showcase-container" id="hero-showcase">
+                            <!-- Dashed Flow Connections SVG -->
+                            <svg class="ci-flow-svg" viewBox="0 0 520 405" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M 170 28 C 220 28, 250 60, 250 95" stroke="#A9BDA9" stroke-width="1.8" stroke-dasharray="4 4"/>
+                                <path d="M 360 140 C 400 140, 410 160, 415 190" stroke="#A9BDA9" stroke-width="1.8" stroke-dasharray="4 4"/>
+                                <path d="M 215 255 C 215 285, 225 300, 230 315" stroke="#A9BDA9" stroke-width="1.8" stroke-dasharray="4 4"/>
+                            </svg>
+
+                            <!-- Node 1: Floating Resume.pdf badge -->
+                            <div class="ci-float-badge ci-node-resume">
+                                <div class="ci-resume-icon-badge">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                        <polyline points="14 2 14 8 20 8"></polyline>
+                                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                                        <polyline points="10 9 9 9 8 9"></polyline>
+                                    </svg>
+                                </div>
+                                <div class="ci-resume-meta">
+                                    <span class="ci-resume-name" id="showcase-resume-name">Resume.pdf</span>
+                                    <span class="ci-resume-status">Parsed &amp; Vectorized</span>
+                                </div>
+                                <span class="ci-pulse-dot" title="Active"></span>
+                            </div>
+
+                            <!-- Node 2: Central Main Card — Match Overview -->
+                            <div class="ci-card ci-card-match-overview">
+                                <div class="ci-card-topbar">
+                                    <h3 class="ci-card-title">Match Overview</h3>
+                                    <span class="ci-tag-soft">
+                                        <span class="ci-live-dot"></span> Live Vector Model
+                                    </span>
+                                </div>
+
+                                <div class="ci-match-overview-grid">
+                                    <!-- Circular Progress Ring -->
+                                    <div class="ci-ring-box">
+                                        <div class="ci-ring-relative">
+                                            <svg class="ci-svg-ring" viewBox="0 0 100 100">
+                                                <circle class="ci-ring-track" cx="50" cy="50" r="38" stroke="#E2EDE2" stroke-width="8" fill="none"/>
+                                                <circle class="ci-ring-progress" id="showcase-ring-stroke" cx="50" cy="50" r="38" stroke="#123B2F" stroke-width="8" fill="none"
+                                                        stroke-dasharray="238.7" stroke-dashoffset="19.1" stroke-linecap="round"/>
+                                            </svg>
+                                            <div class="ci-ring-center-content">
+                                                <span class="ci-ring-score" id="showcase-match-val">92%</span>
+                                                <span class="ci-ring-sub">Match Score</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- 4 Checklist Items -->
+                                    <div class="ci-match-checklist">
+                                        <div class="ci-check-row">
+                                            <div class="ci-check-circle">✓</div>
+                                            <span>Skills Matched</span>
+                                        </div>
+                                        <div class="ci-check-row">
+                                            <div class="ci-check-circle">✓</div>
+                                            <span>Experience Aligned</span>
+                                        </div>
+                                        <div class="ci-check-row">
+                                            <div class="ci-check-circle">✓</div>
+                                            <span>Role Fit</span>
+                                        </div>
+                                        <div class="ci-check-row">
+                                            <div class="ci-check-circle">✓</div>
+                                            <span>High Relevance</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Node 3: Top-Right Floating Card — Recommended Jobs -->
+                            <div class="ci-card ci-card-recommended">
+                                <div class="ci-card-mini-head">
+                                    <div class="ci-mini-title-wrap">
+                                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                                            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                                        </svg>
+                                        <h4>Recommended Jobs</h4>
+                                    </div>
+                                </div>
+                                <div class="ci-mini-job-list" id="showcase-jobs-list">
+                                    <div class="ci-mini-job-item">
+                                        <div class="ci-mini-job-text">
+                                            <span class="ci-mini-role">Data Scientist</span>
+                                            <span class="ci-mini-company">GitHub • San Francisco</span>
+                                        </div>
+                                        <span class="ci-match-pill">93% Match</span>
+                                    </div>
+                                    <div class="ci-mini-job-item">
+                                        <div class="ci-mini-job-text">
+                                            <span class="ci-mini-role">ML Engineer</span>
+                                            <span class="ci-mini-company">Pivotal • Remote</span>
+                                        </div>
+                                        <span class="ci-match-pill">90% Match</span>
+                                    </div>
+                                    <div class="ci-mini-job-item">
+                                        <div class="ci-mini-job-text">
+                                            <span class="ci-mini-role">NLP Engineer</span>
+                                            <span class="ci-mini-company">Twitch • New York</span>
+                                        </div>
+                                        <span class="ci-match-pill">87% Match</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Node 4: Bottom-Left Floating Card — Skill Gap Analysis -->
+                            <div class="ci-card ci-card-skill-gap">
+                                <div class="ci-card-mini-head">
+                                    <div class="ci-mini-title-wrap">
+                                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <circle cx="12" cy="12" r="10"></circle>
+                                            <line x1="12" y1="8" x2="12" y2="16"></line>
+                                            <line x1="8" y1="12" x2="16" y2="12"></line>
+                                        </svg>
+                                        <h4>Skill Gap Analysis</h4>
+                                    </div>
+                                </div>
+                                <div class="ci-gap-content">
+                                    <div class="ci-gap-row">
+                                        <div class="ci-gap-labels">
+                                            <span>Your Skills</span>
+                                            <span class="ci-gap-pct" id="showcase-skills-num">85%</span>
+                                        </div>
+                                        <div class="ci-gap-track">
+                                            <div class="ci-gap-fill ci-fill-forest" id="showcase-skills-fill" style="width: 85%;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="ci-gap-row">
+                                        <div class="ci-gap-labels">
+                                            <span>Job Requirements</span>
+                                            <span class="ci-gap-pct" id="showcase-req-num">92%</span>
+                                        </div>
+                                        <div class="ci-gap-track">
+                                            <div class="ci-gap-fill ci-fill-sage" id="showcase-req-fill" style="width: 92%;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="ci-gap-row">
+                                        <div class="ci-gap-labels">
+                                            <span>Gap</span>
+                                            <span class="ci-gap-pct" id="showcase-gap-num">7%</span>
+                                        </div>
+                                        <div class="ci-gap-track">
+                                            <div class="ci-gap-fill ci-fill-beige" id="showcase-gap-fill" style="width: 7%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Node 5: Ambient Warm Desk Books (Bottom-Right Foreground) -->
+                            <div class="ci-ambient-books" aria-hidden="true">
+                                <div class="ci-spine ci-spine-1"><span>Career</span></div>
+                                <div class="ci-spine ci-spine-2"><span>AI &amp; ML</span></div>
+                                <div class="ci-spine ci-spine-3"><span>Data Science</span></div>
+                                <div class="ci-spine ci-spine-4"><span>Interview Prep</span></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <h1>Find Your <span class="gradient-text">Perfect Job</span> With AI Precision</h1>
-                <p>Upload your resume and let our AI analyze your skills, match you with ideal opportunities, and accelerate your career growth.</p>
-                <div class="hero-actions">
-                    <button class="btn btn-primary btn-lg" onclick="document.getElementById('landing-upload-input').click()">
-                        Upload Resume
-                    </button>
-                    <button class="btn btn-secondary btn-lg" onclick="document.getElementById('upload-section').scrollIntoView({behavior:'smooth'})">
-                        Learn More ↓
-                    </button>
+
+                <!-- Analysis Preview Card (appears after resume is uploaded) -->
+                <div id="landing-analysis-wrap" class="ci-container ci-analysis-wrap hidden">
+                    <div id="landing-analysis-preview" class="ci-analysis-preview"></div>
                 </div>
             </section>
 
-            <!-- Upload Zone -->
-            <section class="upload-zone-section" id="upload-section">
-                <div class="upload-zone" id="landing-upload-zone">
-                    <input type="file" id="landing-upload-input" accept=".pdf" onchange="handleLandingUpload(event)">
-                    <div class="upload-zone-icon"></div>
-                    <h3>Drop your resume here</h3>
-                    <p>Supports PDF files up to 10MB</p>
-                </div>
-                <div id="landing-upload-status"></div>
-            </section>
+            <!-- 2. How It Works Section (Sage-Tinted #EEF3EE) -->
+            <section class="ci-section ci-bg-sage" id="how-it-works">
+                <div class="ci-container">
+                    <div class="ci-section-header text-center">
+                        <span class="ci-section-badge">THE PROCESS</span>
+                        <h2 class="ci-section-title">How It Works — <span class="ci-serif-accent">From Resume to Opportunity</span></h2>
+                        <p class="ci-section-subtitle">A streamlined 4-step intelligence system that eliminates the guesswork from your job search.</p>
+                    </div>
 
-            <!-- Analysis Preview (shown after upload) -->
-            <div id="landing-analysis-preview" class="analysis-preview hidden"></div>
+                    <div class="ci-steps-grid">
+                        <div class="ci-step-card">
+                            <div class="ci-step-num">01</div>
+                            <h3 class="ci-step-title">Upload Resume</h3>
+                            <p class="ci-step-desc">Upload your PDF resume. Our AI parser extracts competencies, seniority, and quantifiable impact in seconds.</p>
+                            <div class="ci-step-tags">
+                                <span>PDF Extraction</span>
+                                <span>ATS Parsing</span>
+                            </div>
+                        </div>
 
-            <!-- How It Works -->
-            <section class="how-it-works">
-                <h2>How It <span class="gradient-text">Works</span></h2>
-                <div class="steps-grid">
-                    <div class="step-card fade-in-delay-1">
-                        <div class="step-number">1</div>
-                        <h3>Upload Resume</h3>
-                        <p>Upload your PDF resume and our AI instantly extracts your skills, experience, and qualifications.</p>
-                    </div>
-                    <div class="step-card fade-in-delay-2">
-                        <div class="step-number">2</div>
-                        <h3>AI Analysis</h3>
-                        <p>Our advanced algorithms analyze your profile against thousands of job listings to find the best matches.</p>
-                    </div>
-                    <div class="step-card fade-in-delay-3">
-                        <div class="step-number">3</div>
-                        <h3>Get Matched</h3>
-                        <p>Receive personalized job recommendations ranked by AI match score, with actionable career insights.</p>
-                    </div>
-                </div>
-            </section>
+                        <div class="ci-step-card">
+                            <div class="ci-step-num">02</div>
+                            <h3 class="ci-step-title">Semantic Analysis</h3>
+                            <p class="ci-step-desc">Advanced sentence-transformer embeddings encode your technical experience into high-dimensional vector space.</p>
+                            <div class="ci-step-tags">
+                                <span>Vector Embeddings</span>
+                                <span>Domain Context</span>
+                            </div>
+                        </div>
 
-            <!-- Features -->
-            <section class="features-section">
-                <h2>Why Choose <span class="gradient-text">RecruitAI</span></h2>
-                <div class="features-grid">
-                    <div class="feature-card fade-in-delay-1">
-                        <div class="feature-icon"></div>
-                        <h3>AI Match Scoring</h3>
-                        <p>Get percentage-based match scores for every job based on semantic analysis of your skills and experience.</p>
-                    </div>
-                    <div class="feature-card fade-in-delay-2">
-                        <div class="feature-icon"></div>
-                        <h3>Skills Gap Analysis</h3>
-                        <p>Identify missing skills and get AI-powered suggestions to improve your profile and marketability.</p>
-                    </div>
-                    <div class="feature-card fade-in-delay-3">
-                        <div class="feature-icon"></div>
-                        <h3>AI Career Assistant</h3>
-                        <p>Chat with our AI for career advice, interview prep, resume tips, and personalized guidance.</p>
-                    </div>
-                    <div class="feature-card fade-in-delay-4">
-                        <div class="feature-icon"></div>
-                        <h3>Real-Time Job Feed</h3>
-                        <p>Access jobs from multiple sources updated in real-time, including remote opportunities worldwide.</p>
+                        <div class="ci-step-card">
+                            <div class="ci-step-num">03</div>
+                            <h3 class="ci-step-title">Precision Match</h3>
+                            <p class="ci-step-desc">Scored across thousands of live vacancies using cosine similarity to rank true capability, not just keywords.</p>
+                            <div class="ci-step-tags">
+                                <span>Cosine Similarity</span>
+                                <span>Live Feed Scoring</span>
+                            </div>
+                        </div>
+
+                        <div class="ci-step-card">
+                            <div class="ci-step-num">04</div>
+                            <h3 class="ci-step-title">Skill Gap &amp; Apply</h3>
+                            <p class="ci-step-desc">Review your match breakdown, bridge identified skill gaps with targeted insights, and apply with confidence.</p>
+                            <div class="ci-step-tags">
+                                <span>Gap Roadmap</span>
+                                <span>Direct Apply</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
 
-            <!-- CTA -->
-            <section class="landing-cta">
-                <h2>Ready to <span class="gradient-text">Transform</span> Your Job Search?</h2>
-                <p>Join thousands of candidates who found their dream jobs using AI-powered matching.</p>
-                <button class="btn btn-primary btn-lg" onclick="navigateTo('login')">Create Free Account →</button>
+            <!-- 3. About Section (Warm Ivory Light #FAF8F4) -->
+            <section class="ci-section ci-bg-ivory" id="about-section">
+                <div class="ci-container">
+                    <div class="ci-section-header text-center">
+                        <span class="ci-section-badge">ABOUT RECRUITAI</span>
+                        <h2 class="ci-section-title">Empowering Careers Through <span class="ci-serif-accent">True Skill Intelligence</span></h2>
+                        <p class="ci-section-subtitle">We founded RecruitAI with a simple conviction: technical hiring shouldn't be a game of keyword matching. We built semantic AI to let your actual capability lead.</p>
+                    </div>
+
+                    <div class="ci-about-grid">
+                        <div class="ci-about-card">
+                            <div class="ci-about-icon-box">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="2" y1="12" x2="22" y2="12"></line>
+                                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="ci-about-title">Context Over Keywords</h3>
+                            <p class="ci-about-desc">Traditional applicant tracking systems discard great engineers over missing synonym tags. Our 384-dimensional semantic models understand the true depth of your technical experience.</p>
+                        </div>
+
+                        <div class="ci-about-card">
+                            <div class="ci-about-icon-box">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="18" y1="20" x2="18" y2="10"></line>
+                                    <line x1="12" y1="20" x2="12" y2="4"></line>
+                                    <line x1="6" y1="20" x2="6" y2="14"></line>
+                                </svg>
+                            </div>
+                            <h3 class="ci-about-title">Actionable Skill Diagnostics</h3>
+                            <p class="ci-about-desc">We believe in transparent hiring feedback. Instead of automated rejections, our skill gap analysis reveals exactly which competencies will accelerate your interview readiness.</p>
+                        </div>
+
+                        <div class="ci-about-card">
+                            <div class="ci-about-icon-box">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                                </svg>
+                            </div>
+                            <h3 class="ci-about-title">Candidate-First Privacy</h3>
+                            <p class="ci-about-desc">Your resume and personal details are strictly encrypted. We never sell candidate profiles or trigger unauthorized recruiter outreach. You stay in control at all times.</p>
+                        </div>
+                    </div>
+                </div>
             </section>
 
-            <!-- Footer -->
-            <footer class="landing-footer">
-                <p>© 2026 RecruitAI. Built with AI for smarter hiring.</p>
+            <!-- 4. Contact Section ("contact like") (Sage-Tinted #EEF3EE) -->
+            <section class="ci-section ci-bg-sage" id="contact-section">
+                <div class="ci-container">
+                    <div class="ci-section-header text-center">
+                        <span class="ci-section-badge">GET IN TOUCH</span>
+                        <h2 class="ci-section-title">Have Questions? <span class="ci-serif-accent">We're Here to Help</span></h2>
+                        <p class="ci-section-subtitle">Whether you're a candidate exploring new roles, an employer looking for verified talent, or just have feedback, reach out to our team.</p>
+                    </div>
+
+                    <div class="ci-contact-grid">
+                        <!-- Left: Contact Information -->
+                        <div class="ci-contact-info-card">
+                            <div class="ci-contact-detail">
+                                <div class="ci-contact-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                        <polyline points="22,6 12,13 2,6"></polyline>
+                                    </svg>
+                                </div>
+                                <div class="ci-contact-text">
+                                    <h4>General Support</h4>
+                                    <p><a href="mailto:support@recruitai.com">support@recruitai.com</a></p>
+                                </div>
+                            </div>
+
+                            <div class="ci-contact-detail">
+                                <div class="ci-contact-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                                    </svg>
+                                </div>
+                                <div class="ci-contact-text">
+                                    <h4>Employer Partnerships</h4>
+                                    <p><a href="mailto:partners@recruitai.com">partners@recruitai.com</a></p>
+                                </div>
+                            </div>
+
+                            <div class="ci-contact-detail">
+                                <div class="ci-contact-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <polyline points="12 6 12 12 16 14"></polyline>
+                                    </svg>
+                                </div>
+                                <div class="ci-contact-text">
+                                    <h4>Response Window</h4>
+                                    <p>Within 24 business hours</p>
+                                </div>
+                            </div>
+
+                            <div class="ci-contact-detail">
+                                <div class="ci-contact-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                        <circle cx="12" cy="10" r="3"></circle>
+                                    </svg>
+                                </div>
+                                <div class="ci-contact-text">
+                                    <h4>Headquarters</h4>
+                                    <p>San Francisco, CA &amp; Distributed Worldwide</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right: Interactive Contact Form -->
+                        <div class="ci-contact-form-card">
+                            <form id="contact-form" onsubmit="handleContactSubmit(event)">
+                                <div class="ci-form-row">
+                                    <div class="ci-form-group">
+                                        <label for="contact-name">Your Name</label>
+                                        <input type="text" id="contact-name" class="ci-form-input" placeholder="e.g. Alex Morgan" required>
+                                    </div>
+                                    <div class="ci-form-group">
+                                        <label for="contact-email">Email Address</label>
+                                        <input type="email" id="contact-email" class="ci-form-input" placeholder="you@example.com" required>
+                                    </div>
+                                </div>
+
+                                <div class="ci-form-group">
+                                    <label for="contact-role">I am a</label>
+                                    <select id="contact-role" class="ci-form-select">
+                                        <option value="candidate">Candidate exploring opportunities</option>
+                                        <option value="recruiter">Recruiter or hiring manager</option>
+                                        <option value="partner">Enterprise / Partner inquiry</option>
+                                        <option value="other">General question</option>
+                                    </select>
+                                </div>
+
+                                <div class="ci-form-group">
+                                    <label for="contact-message">Message</label>
+                                    <textarea id="contact-message" class="ci-form-textarea" placeholder="How can we assist you with your career or hiring needs?" required></textarea>
+                                </div>
+
+                                <button type="submit" class="ci-btn-primary btn-full" style="padding: 13px;">
+                                    <span>Send Message &rarr;</span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 5. Start Button / Get Started CTA Section ("start button vala kuch") -->
+            <section class="ci-final-cta-section" id="get-started-section">
+                <div class="ci-container">
+                    <div class="ci-cta-banner">
+                        <div class="ci-cta-content text-center">
+                            <span class="ci-section-badge ci-badge-light">START TODAY</span>
+                            <h2 class="ci-cta-title">Ready to Let Your Skills Lead?<br><span class="ci-serif-accent ci-serif-light">Get Started in Under 60 Seconds.</span></h2>
+                            <p class="ci-cta-subtitle">Join thousands of engineers, data scientists, and leaders unlocking higher-fit career opportunities.</p>
+                            <div class="ci-cta-actions">
+                                <button class="ci-btn-ivory" onclick="navigateTo('login')">
+                                    <span>Get Started Free &rarr;</span>
+                                </button>
+                                <button class="ci-btn-outline-ivory" onclick="triggerHeroUpload()">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                        <polyline points="17 8 12 3 7 8"></polyline>
+                                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                                    </svg>
+                                    <span>Upload Your Resume</span>
+                                </button>
+                            </div>
+                            <p class="ci-cta-guarantee">🔒 100% Free for candidates. No credit card required. Encrypted &amp; private.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Refined Editorial Footer (Charcoal #202923) -->
+            <footer class="ci-landing-footer">
+                <div class="ci-container ci-footer-inner">
+                    <div class="ci-footer-brand">
+                        <div class="ci-brand-link">
+                            <div class="ci-brand-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                    <rect width="24" height="24" rx="6" fill="#123B2F"/>
+                                    <path d="M6 16.5C8.5 14 11 11.5 18 7.5C14 14.5 11.5 17 9 19.5" stroke="#F5F2E9" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            <span class="ci-brand-text text-white">Recruit<span class="ci-brand-ai">AI</span></span>
+                        </div>
+                        <p class="ci-footer-desc">AI-powered career intelligence and precision semantic job matching. Helping high-growth professionals discover ideal career opportunities.</p>
+                    </div>
+
+                    <div class="ci-footer-links-grid">
+                        <div class="ci-footer-col">
+                            <h4>Platform</h4>
+                            <a href="#how-it-works">How It Works</a>
+                            <a href="#about-section">About RecruitAI</a>
+                            <a href="#contact-section">Contact Us</a>
+                            <a href="#get-started-section">Get Started</a>
+                        </div>
+                        <div class="ci-footer-col">
+                            <h4>Candidates</h4>
+                            <a href="#" onclick="triggerHeroUpload(); return false;">Resume Analysis</a>
+                            <a href="#" onclick="navigateTo('login'); return false;">Sign In / Portal</a>
+                            <a href="#" onclick="navigateTo('login'); return false;">Create Free Account</a>
+                        </div>
+                        <div class="ci-footer-col">
+                            <h4>Trust &amp; Privacy</h4>
+                            <a href="#">Data Confidentiality</a>
+                            <a href="#">ATS Parsing Integrity</a>
+                            <a href="#">Security Safeguards</a>
+                            <a href="#">Terms of Service</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ci-footer-bottom">
+                    <div class="ci-container ci-footer-bottom-inner">
+                        <p>© 2026 RecruitAI Platform. All rights reserved.</p>
+                        <p class="ci-footer-tagline">Find the Right Opportunities. Let Your Skills Lead.</p>
+                    </div>
+                </div>
             </footer>
         </div>
     </template>
 
     <!-- LOGIN / REGISTER -->
     <template id="view-login">
-        <div class="auth-page">
-            <div class="auth-card">
-                <div style="text-align:center; margin-bottom: var(--space-6);">
-                    <div class="sidebar-logo" style="justify-content:center; margin-bottom: var(--space-4);">
-                        <div class="sidebar-logo-icon"></div>
-                        <span class="sidebar-logo-text">RecruitAI</span>
-                    </div>
-                    <h1>Welcome Back</h1>
-                    <p class="subtitle" style="margin-bottom:0;">Sign in to your account to continue.</p>
+        <div class="cm-auth-page">
+            <!-- Ambient Workspace Window, Daylight Beam & Scenic Blurred City Skyline -->
+            <div class="cm-auth-ambiance" aria-hidden="true">
+                <div class="cm-window-light"></div>
+                <div class="cm-sunbeam"></div>
+                
+                <!-- Softly blurred professional city skyline in daylight -->
+                <div class="cm-city-skyline">
+                    <svg viewBox="0 0 1440 380" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.8"/>
+                                <stop offset="100%" stop-color="#DCE8D9" stop-opacity="0.25"/>
+                            </linearGradient>
+                        </defs>
+                        <!-- Distant city towers and architectural silhouettes -->
+                        <path d="M 0 380 L 0 260 L 60 260 L 60 240 L 90 240 L 90 280 L 140 280 L 140 200 L 180 200 L 180 180 L 185 140 L 190 180 L 220 180 L 220 290 L 260 290 L 260 210 L 320 210 L 320 300 L 380 300 L 380 170 L 410 170 L 410 120 L 415 80 L 420 120 L 450 120 L 450 270 L 510 270 L 510 220 L 580 220 L 580 310 L 650 310 L 650 190 L 710 190 L 710 280 L 780 280 L 780 160 L 820 160 L 820 110 L 825 70 L 830 110 L 860 110 L 860 290 L 920 290 L 920 230 L 990 230 L 990 320 L 1060 320 L 1060 210 L 1140 210 L 1140 300 L 1220 300 L 1220 180 L 1280 180 L 1280 260 L 1350 260 L 1350 220 L 1440 220 L 1440 380 Z" fill="#C2D6C0" opacity="0.35"/>
+                        <path d="M 0 380 L 0 290 L 80 290 L 80 230 L 130 230 L 130 310 L 210 310 L 210 250 L 270 250 L 270 330 L 350 330 L 350 240 L 420 240 L 420 300 L 490 300 L 490 260 L 560 260 L 560 340 L 640 340 L 640 250 L 720 250 L 720 320 L 800 320 L 800 230 L 870 230 L 870 310 L 950 310 L 950 260 L 1030 260 L 1030 330 L 1110 330 L 1110 240 L 1190 240 L 1190 310 L 1270 310 L 1270 270 L 1360 270 L 1360 340 L 1440 340 L 1440 380 Z" fill="#A8C4A6" opacity="0.25"/>
+                    </svg>
                 </div>
 
-                <div class="auth-tabs">
-                    <button class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">Login</button>
-                    <button class="auth-tab" id="tab-register" onclick="switchAuthTab('register')">Register</button>
+                <!-- Botanical green foliage framing top-center -->
+                <svg class="cm-top-leaves" viewBox="0 0 460 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M 230 0 C 230 40, 240 70, 260 100 C 275 120, 300 135, 340 145" stroke="#174D38" stroke-width="2.5" stroke-linecap="round" opacity="0.4"/>
+                    <path d="M 260 100 C 220 85, 205 55, 210 25 C 235 40, 250 70, 260 100 Z" fill="#174D38" opacity="0.25"/>
+                    <path d="M 280 65 C 315 45, 340 15, 335 0 C 310 15, 290 40, 280 65 Z" fill="#DCE8D9" opacity="0.6"/>
+                    <path d="M 300 120 C 335 110, 355 85, 360 55 C 335 65, 315 90, 300 120 Z" fill="#174D38" opacity="0.28"/>
+                    <path d="M 340 145 C 375 140, 395 120, 400 95 C 375 105, 355 125, 340 145 Z" fill="#DCE8D9" opacity="0.5"/>
+                    <path d="M 245 40 C 215 30, 195 10, 190 0 C 210 5, 230 20, 245 40 Z" fill="#174D38" opacity="0.2"/>
+                </svg>
+            </div>
+
+            <div class="cm-auth-container">
+                <!-- LEFT COLUMN: Career Branding & Workspace Laptop Showcase -->
+                <div class="cm-auth-left">
+                    <!-- Brand Bar -->
+                    <a href="#landing" onclick="navigateTo('landing'); return false;" class="cm-brand-header">
+                        <div class="cm-brand-badge">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#DCE8D9" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+                                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                            </svg>
+                        </div>
+                        <span class="cm-brand-title">Recruit<span class="cm-brand-ai">AI</span></span>
+                    </a>
+
+                    <!-- Platform Pill Badge -->
+                    <div class="cm-platform-pill">
+                        <span class="cm-sparkle">✦</span>
+                        <span>AI-Powered Career Platform</span>
+                    </div>
+
+                    <!-- Main Headline with Elegant Serif Italic Accent -->
+                    <h1 class="cm-headline">
+                        Find the Right Jobs<br>
+                        with <span class="cm-serif-italic">Your Resume<svg class="cm-underline-svg" viewBox="0 0 190 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M 4 7 Q 95 1 186 6" stroke="#174D38" stroke-width="3" stroke-linecap="round"/></svg></span>
+                    </h1>
+
+                    <!-- Supporting Text -->
+                    <p class="cm-subtext">
+                        Upload your resume, discover relevant opportunities, understand your skill gaps, and take the next step in your career.
+                    </p>
+
+                    <!-- Three Compact Feature Indicators -->
+                    <div class="cm-features-row">
+                        <div class="cm-feature-card">
+                            <div class="cm-feat-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                    <polyline points="14 2 14 8 20 8"/>
+                                    <line x1="16" y1="13" x2="8" y2="13"/>
+                                    <line x1="16" y1="17" x2="8" y2="17"/>
+                                </svg>
+                            </div>
+                            <span class="cm-feat-text">Resume<br>Analysis</span>
+                        </div>
+
+                        <div class="cm-feature-divider"></div>
+
+                        <div class="cm-feature-card">
+                            <div class="cm-feat-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+                                    <polyline points="2 17 12 22 22 17"/>
+                                    <polyline points="2 12 12 17 22 12"/>
+                                </svg>
+                            </div>
+                            <span class="cm-feat-text">Job<br>Matching</span>
+                        </div>
+
+                        <div class="cm-feature-divider"></div>
+
+                        <div class="cm-feature-card">
+                            <div class="cm-feat-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="18" y1="20" x2="18" y2="10"/>
+                                    <line x1="12" y1="20" x2="12" y2="4"/>
+                                    <line x1="6" y1="20" x2="6" y2="14"/>
+                                </svg>
+                            </div>
+                            <span class="cm-feat-text">Skill Gap<br>Insights</span>
+                        </div>
+                    </div>
+
+                    <!-- Realistic Laptop & Desk Workspace Mockup -->
+                    <div class="cm-desk-scene" aria-hidden="true">
+                        <!-- Potted Plant on desk left -->
+                        <div class="cm-desk-plant">
+                            <svg width="86" height="120" viewBox="0 0 86 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <!-- Leaves -->
+                                <path d="M 43 70 C 25 50 15 30 18 10 C 35 15 42 40 43 70 Z" fill="#174D38" opacity="0.85"/>
+                                <path d="M 43 70 C 55 45 70 25 80 15 C 75 35 60 55 43 70 Z" fill="#24684E" opacity="0.9"/>
+                                <path d="M 43 70 C 35 45 38 20 45 5 C 52 20 50 45 43 70 Z" fill="#DCE8D9" opacity="0.75"/>
+                                <path d="M 43 70 C 15 60 5 45 0 35 C 15 40 30 55 43 70 Z" fill="#103B2D" opacity="0.8"/>
+                                <!-- Ceramic pot -->
+                                <path d="M 24 72 L 62 72 L 56 116 L 30 116 Z" fill="#FAF6EE" stroke="#E9DFCE" stroke-width="1.5"/>
+                                <ellipse cx="43" cy="72" rx="19" ry="4" fill="#E9DFCE"/>
+                                <ellipse cx="43" cy="72" rx="17" ry="3" fill="#5A4A3B"/>
+                            </svg>
+                        </div>
+
+                        <!-- Ceramic Forest Green Coffee Mug with Logo -->
+                        <div class="cm-desk-mug" title="RecruitAI Mug">
+                            <svg class="cm-mug-logo" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#DCE8D9" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+                                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                            </svg>
+                        </div>
+
+                        <!-- Sleek Modern Open Laptop with Realistic RecruitAI Dashboard -->
+                        <div class="cm-laptop">
+                            <div class="cm-laptop-screen">
+                                <div class="cm-webcam"></div>
+                                <div class="cm-dashboard-ui">
+                                    <!-- Mini Left Sidebar -->
+                                    <div class="cm-dash-sidebar">
+                                        <div class="cm-dash-logo">
+                                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#DCE8D9" stroke-width="2.5">
+                                                <rect x="2" y="7" width="20" height="14" rx="2"/>
+                                                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                                            </svg>
+                                        </div>
+                                        <div class="cm-dash-nav-icon active"></div>
+                                        <div class="cm-dash-nav-icon"></div>
+                                        <div class="cm-dash-nav-icon"></div>
+                                    </div>
+
+                                    <!-- Main Dashboard Area -->
+                                    <div class="cm-dash-main">
+                                        <div class="cm-dash-header">
+                                            <span class="cm-dash-brand">RecruitAI</span>
+                                            <div class="cm-dash-user-pill">
+                                                <div class="cm-dash-user-dot"></div>
+                                            </div>
+                                        </div>
+
+                                        <div class="cm-dash-grid">
+                                            <!-- Card 1: Your Match Score -->
+                                            <div class="cm-dash-card cm-card-score">
+                                                <div class="cm-card-header-sm">Your Match Score</div>
+                                                <div class="cm-dash-score-ring">
+                                                    <svg viewBox="0 0 60 60" class="cm-ring-svg">
+                                                        <circle cx="30" cy="30" r="22" stroke="#E5EEE3" stroke-width="5" fill="none"/>
+                                                        <circle cx="30" cy="30" r="22" stroke="#174D38" stroke-width="5" fill="none" stroke-dasharray="138.2" stroke-dashoffset="11" stroke-linecap="round"/>
+                                                    </svg>
+                                                    <span class="cm-ring-txt">92%</span>
+                                                </div>
+                                            </div>
+
+                                            <!-- Card 2: Top Job Matches -->
+                                            <div class="cm-dash-card cm-card-jobs">
+                                                <div class="cm-card-header-sm">Top Job Matches</div>
+                                                <div class="cm-dash-job-row">
+                                                    <div class="cm-mini-briefcase">💼</div>
+                                                    <div class="cm-job-info-line">
+                                                        <div class="cm-line-primary"></div>
+                                                        <div class="cm-line-secondary"></div>
+                                                    </div>
+                                                    <span class="cm-job-pct">93%</span>
+                                                </div>
+                                                <div class="cm-dash-job-row">
+                                                    <div class="cm-mini-briefcase">💼</div>
+                                                    <div class="cm-job-info-line">
+                                                        <div class="cm-line-primary" style="width: 60%;"></div>
+                                                        <div class="cm-line-secondary" style="width: 40%;"></div>
+                                                    </div>
+                                                    <span class="cm-job-pct">90%</span>
+                                                </div>
+                                                <div class="cm-dash-job-row">
+                                                    <div class="cm-mini-briefcase">💼</div>
+                                                    <div class="cm-job-info-line">
+                                                        <div class="cm-line-primary" style="width: 65%;"></div>
+                                                        <div class="cm-line-secondary" style="width: 35%;"></div>
+                                                    </div>
+                                                    <span class="cm-job-pct">87%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Card 3: Skill Insights -->
+                                        <div class="cm-dash-card cm-card-skills">
+                                            <div class="cm-card-header-sm">Skill Insights</div>
+                                            <div class="cm-skill-bars">
+                                                <div class="cm-skill-item">
+                                                    <div class="cm-skill-label-row">
+                                                        <span>Matched Skills</span>
+                                                        <span>85%</span>
+                                                    </div>
+                                                    <div class="cm-bar-track">
+                                                        <div class="cm-bar-fill cm-bar-green" style="width: 85%;"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="cm-skill-item">
+                                                    <div class="cm-skill-label-row">
+                                                        <span>Skill Gap</span>
+                                                        <span>7%</span>
+                                                    </div>
+                                                    <div class="cm-bar-track">
+                                                        <div class="cm-bar-fill cm-bar-beige" style="width: 7%;"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Laptop Base -->
+                            <div class="cm-laptop-base">
+                                <div class="cm-laptop-notch"></div>
+                            </div>
+                        </div>
+
+                        <!-- Natural Wood Desk Surface -->
+                        <div class="cm-desk-surface"></div>
+                    </div>
                 </div>
 
-                <form id="auth-form" onsubmit="handleAuth(event)">
-                    <div class="form-group">
-                        <label for="auth-email">Email</label>
-                        <input type="email" id="auth-email" class="form-input" required placeholder="you@example.com">
+                <!-- RIGHT COLUMN: Elegant Ivory Glass-Effect Authentication Card -->
+                <div class="cm-auth-right">
+                    <div class="cm-auth-glass-card">
+                        <!-- Card Brand Header -->
+                        <div class="cm-card-brand-header">
+                            <div class="cm-card-badge">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#DCE8D9" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+                                    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                                </svg>
+                            </div>
+                            <span class="cm-card-brand-name">Recruit<span class="cm-brand-ai">AI</span></span>
+                        </div>
+
+                        <h2 class="cm-auth-title" id="auth-title">Welcome Back</h2>
+                        <p class="cm-auth-subtitle" id="auth-subtitle">Sign in to your account to continue your career journey.</p>
+
+                        <!-- Login / Register Switcher -->
+                        <div class="cm-auth-tabs">
+                            <button type="button" class="cm-auth-tab active" id="tab-login" onclick="switchAuthTab('login')">Login</button>
+                            <button type="button" class="cm-auth-tab" id="tab-register" onclick="switchAuthTab('register')">Register</button>
+                        </div>
+
+                        <!-- Form -->
+                        <form id="auth-form" onsubmit="handleAuth(event)">
+                            <!-- Email Field -->
+                            <div class="cm-field-group">
+                                <label for="auth-email" class="cm-field-label">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                                        <polyline points="22,6 12,13 2,6"/>
+                                    </svg>
+                                    <span>Email</span>
+                                </label>
+                                <div class="cm-input-wrapper">
+                                    <input type="email" id="auth-email" class="cm-input" placeholder="Enter your email" required autocomplete="email">
+                                </div>
+                            </div>
+
+                            <!-- Password Field with Visibility Toggle -->
+                            <div class="cm-field-group">
+                                <label for="auth-password" class="cm-field-label">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                                        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                                    </svg>
+                                    <span>Password</span>
+                                </label>
+                                <div class="cm-input-wrapper cm-has-action">
+                                    <input type="password" id="auth-password" class="cm-input" placeholder="Enter your password" required autocomplete="current-password">
+                                    <button type="button" class="cm-input-action-btn" id="password-toggle-btn" onclick="togglePasswordVisibility('auth-password', this)" title="Toggle password visibility" aria-label="Toggle password visibility">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                            <circle cx="12" cy="12" r="3"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Role Selector (Shown in Register mode) -->
+                            <div class="cm-field-group hidden" id="role-group">
+                                <label for="auth-role" class="cm-field-label">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                        <circle cx="12" cy="7" r="4"/>
+                                    </svg>
+                                    <span>I am a</span>
+                                </label>
+                                <div class="cm-input-wrapper">
+                                    <select id="auth-role" class="cm-select">
+                                        <option value="candidate">Candidate — looking for jobs</option>
+                                        <option value="recruiter">Recruiter — hiring talent</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Forgot Password Link -->
+                            <div class="cm-forgot-wrap" id="forgot-password-link">
+                                <a href="#" onclick="handleForgotPassword(); return false;" class="cm-link-subtle">Forgot password?</a>
+                            </div>
+
+                            <!-- Form Error Container -->
+                            <div id="auth-error" class="cm-form-error"></div>
+
+                            <!-- Submit Button -->
+                            <button type="submit" class="cm-btn-submit" id="auth-submit">
+                                <span>Sign In</span>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"/>
+                                    <polyline points="12 5 19 12 12 19"/>
+                                </svg>
+                            </button>
+                        </form>
+
+                        <!-- Social Login Options -->
+                        <div class="cm-social-section" id="auth-social-section">
+                            <div class="cm-divider">
+                                <span>or continue with</span>
+                            </div>
+
+                            <div class="cm-social-grid">
+                                <button type="button" class="cm-social-btn" onclick="handleSocialAuth('Google')">
+                                    <!-- Google G Logo SVG -->
+                                    <svg width="18" height="18" viewBox="0 0 24 24">
+                                        <path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.4l3.7 2.9C6.2 7.4 8.9 5 12 5z"/>
+                                        <path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.6h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.9z"/>
+                                        <path fill="#FBBC05" d="M5.3 14.7c-.2-.7-.4-1.5-.4-2.7s.1-2 .4-2.7L1.6 6.4C.6 8.3 0 10.1 0 12s.6 3.7 1.6 5.6l3.7-2.9z"/>
+                                        <path fill="#34A853" d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.4-6.7-5.3L1.6 15.9C3.5 19.7 7.4 23 12 23z"/>
+                                    </svg>
+                                    <span>Google</span>
+                                </button>
+
+                                <button type="button" class="cm-social-btn" onclick="handleSocialAuth('GitHub')">
+                                    <!-- GitHub Mark SVG -->
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="#252923">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+                                    </svg>
+                                    <span>GitHub</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Footer Switch Link -->
+                        <div class="cm-switch-wrap">
+                            <span id="auth-switch-text">Don't have an account?</span>
+                            <a href="#" onclick="switchAuthTab(isLoginMode?'register':'login'); return false;" id="auth-switch-link" class="cm-switch-link">Sign up</a>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="auth-password">Password</label>
-                        <input type="password" id="auth-password" class="form-input" required placeholder="••••••••">
-                    </div>
-
-                    <div class="form-group hidden" id="role-group">
-                        <label for="auth-role">I am a</label>
-                        <select id="auth-role" class="form-input">
-                            <option value="candidate">Candidate — looking for jobs</option>
-                            <option value="recruiter">Recruiter — hiring talent</option>
-                        </select>
-                    </div>
-
-                    <div id="auth-error" class="form-error"></div>
-
-                    <button type="submit" class="btn btn-primary btn-lg btn-full" id="auth-submit" style="margin-top: var(--space-4);">
-                        Sign In
-                    </button>
-                </form>
-
-                <p style="text-align:center; margin-top: var(--space-5); font-size: 0.813rem; color: var(--text-tertiary);">
-                    <span id="auth-switch-text">Don't have an account?</span>
-                    <a href="#" onclick="switchAuthTab(isLoginMode?'register':'login'); return false;" id="auth-switch-link" style="color: var(--primary); font-weight: 500;">Sign up</a>
-                </p>
+                </div>
             </div>
         </div>
     </template>
 
     <!-- OTP VERIFICATION -->
     <template id="view-otp">
-        <div class="auth-page">
-            <div class="auth-card">
-                <div style="text-align:center; margin-bottom: var(--space-6);">
-                    <div class="sidebar-logo" style="justify-content:center; margin-bottom: var(--space-4);">
-                        <div class="sidebar-logo-icon"></div>
-                        <span class="sidebar-logo-text">RecruitAI</span>
+        <div class="cm-auth-page cm-otp-page">
+            <div class="cm-auth-ambiance" aria-hidden="true">
+                <div class="cm-window-light"></div>
+                <div class="cm-sunbeam"></div>
+            </div>
+
+            <div class="cm-auth-container cm-otp-container">
+                <div class="cm-auth-glass-card cm-otp-card">
+                    <div class="cm-card-brand-header">
+                        <div class="cm-card-badge">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#DCE8D9" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+                                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                            </svg>
+                        </div>
+                        <span class="cm-card-brand-name">Recruit<span class="cm-brand-ai">AI</span></span>
                     </div>
-                    <h1>Verify your email</h1>
-                    <p class="subtitle" style="margin-bottom:0;">We sent a 6-digit OTP to your email.</p>
+
+                    <h2 class="cm-auth-title">Verify Your Email</h2>
+                    <p class="cm-auth-subtitle">We sent a 6-digit verification code to your email.</p>
+
+                    <form id="otp-form" onsubmit="handleVerifyOTP(event)">
+                        <div class="cm-field-group">
+                            <label for="otp-email" class="cm-field-label">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                                    <polyline points="22,6 12,13 2,6"/>
+                                </svg>
+                                <span>Email Address</span>
+                            </label>
+                            <div class="cm-input-wrapper">
+                                <input type="email" id="otp-email" class="cm-input" required readonly style="background: rgba(233, 223, 206, 0.45); cursor: not-allowed;">
+                            </div>
+                        </div>
+
+                        <div class="cm-field-group">
+                            <label for="otp-code" class="cm-field-label">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <polyline points="12 6 12 12 16 14"/>
+                                </svg>
+                                <span>6-digit OTP</span>
+                            </label>
+                            <div class="cm-input-wrapper">
+                                <input type="text" id="otp-code" class="cm-input cm-otp-input" required pattern="\d{6}" maxlength="6" placeholder="123456">
+                            </div>
+                        </div>
+
+                        <div id="otp-error" class="cm-form-error"></div>
+
+                        <button type="submit" class="cm-btn-submit" id="otp-submit">
+                            <span>Verify OTP</span>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="5" y1="12" x2="19" y2="12"/>
+                                <polyline points="12 5 19 12 12 19"/>
+                            </svg>
+                        </button>
+                    </form>
+
+                    <div class="cm-switch-wrap">
+                        <a href="#" onclick="switchAuthTab('login'); navigateTo('login'); return false;" class="cm-switch-link">&larr; Back to Sign In</a>
+                    </div>
                 </div>
-
-                <form id="otp-form" onsubmit="handleVerifyOTP(event)">
-                    <div class="form-group">
-                        <label for="otp-email">Email</label>
-                        <input type="email" id="otp-email" class="form-input" required readonly>
-                    </div>
-                    <div class="form-group">
-                        <label for="otp-code">6-digit OTP</label>
-                        <input type="text" id="otp-code" class="form-input" required pattern="\d{6}" maxlength="6" placeholder="123456" style="text-align:center; letter-spacing: 0.5em; font-size: 1.2rem;">
-                    </div>
-
-                    <div id="otp-error" class="form-error"></div>
-
-                    <button type="submit" class="btn btn-primary btn-lg btn-full" id="otp-submit" style="margin-top: var(--space-4);">
-                        Verify OTP
-                    </button>
-                </form>
             </div>
         </div>
     </template>
 
     <!-- CANDIDATE DASHBOARD -->
     <template id="view-candidate-dashboard">
-        <div class="fade-in">
-            <div class="page-header">
-                <h1>Dashboard</h1>
-                <p>Welcome back! Here's your career snapshot.</p>
-            </div>
+        <div class="cm-dashboard-page">
+            <!-- Hero Header with Workspace Artwork -->
+            <div class="cm-dash-hero">
+                <!-- Left Header Copy -->
+                <div class="cm-dash-hero-text">
+                    <div class="cm-user-welcome-pill" id="dashboard-welcome-pill">
+                        <span>Welcome Back, <span id="dash-user-name">Ritik</span> 👋</span>
+                    </div>
+                    <h1 class="cm-dash-hero-title">
+                        Your Career <span class="cm-serif-italic">Dashboard</span>
+                    </h1>
+                    <p class="cm-dash-hero-subtitle">
+                        Track your resume performance, discover better job matches, and grow your career.
+                    </p>
+                </div>
 
-            <!-- Stats Row -->
-            <div class="stats-grid" id="dashboard-stats">
-                <div class="stat-card fade-in-delay-1">
-                    <div class="stat-card-header">
-                        <div class="stat-card-icon blue"></div>
-                    </div>
-                    <div class="stat-card-value" id="stat-match-score">—</div>
-                    <div class="stat-card-label">Resume Match Score</div>
-                </div>
-                <div class="stat-card fade-in-delay-2">
-                    <div class="stat-card-header">
-                        <div class="stat-card-icon green"></div>
-                    </div>
-                    <div class="stat-card-value" id="stat-applications">0</div>
-                    <div class="stat-card-label">Applications Sent</div>
-                </div>
-                <div class="stat-card fade-in-delay-3">
-                    <div class="stat-card-header">
-                        <div class="stat-card-icon violet"></div>
-                    </div>
-                    <div class="stat-card-value" id="stat-saved">0</div>
-                    <div class="stat-card-label">Saved Jobs</div>
-                </div>
-                <div class="stat-card fade-in-delay-4">
-                    <div class="stat-card-header">
-                        <div class="stat-card-icon amber"></div>
-                    </div>
-                    <div class="stat-card-value" id="stat-profile">0%</div>
-                    <div class="stat-card-label">Profile Completion</div>
-                </div>
-            </div>
+                <!-- Right Workspace Ambient Art (Desk, Mug, Laptop, Plant, Sunlight) -->
+                <div class="cm-dash-hero-art" aria-hidden="true">
+                    <!-- Soft organic wave contours in background -->
+                    <svg class="cm-dash-wave-art" viewBox="0 0 450 180" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M 0 160 C 150 110, 280 180, 450 120 L 450 180 L 0 180 Z" fill="#EEF4ED" opacity="0.8"/>
+                        <path d="M 50 170 C 180 135, 300 175, 450 140 L 450 180 L 50 180 Z" fill="#E9DFCE" opacity="0.45"/>
+                    </svg>
 
-            <!-- Middle Row: Resume Health + Skills Gap + AI Suggestions -->
-            <div class="widgets-grid-3" id="dashboard-widgets">
-                <!-- Resume Health -->
-                <div class="widget fade-in-delay-2">
-                    <div class="widget-header">
-                        <h3 class="widget-title">Resume Health</h3>
-                        <button class="widget-action" onclick="navigateTo('profile')">View Profile</button>
-                    </div>
-                    <div id="resume-health-content">
-                        <div class="empty-state" style="padding: var(--space-4);">
-                            <p style="font-size: 0.813rem;">Upload a resume to see health analysis.</p>
+                    <!-- Hanging greenery leaves at top right -->
+                    <svg class="cm-dash-leaves" viewBox="0 0 200 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M 120 0 C 120 25, 110 50, 80 70" stroke="#174D38" stroke-width="2" opacity="0.45"/>
+                        <path d="M 80 70 C 65 55, 60 35, 70 20 C 80 30, 85 50, 80 70 Z" fill="#174D38" opacity="0.3"/>
+                        <path d="M 95 40 C 115 30, 130 15, 125 5 C 110 15, 100 30, 95 40 Z" fill="#DCE8D9" opacity="0.65"/>
+                        <path d="M 110 65 C 130 60, 145 45, 150 30 C 135 35, 120 50, 110 65 Z" fill="#174D38" opacity="0.35"/>
+                    </svg>
+
+                    <div class="cm-dash-desk-items">
+                        <!-- Ceramic Coffee Mug with RecruitAI Logo -->
+                        <div class="cm-hero-mug" title="RecruitAI Mug">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#DCE8D9" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+                                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                            </svg>
                         </div>
-                    </div>
-                </div>
 
-                <!-- Skills Gap Analysis -->
-                <div class="widget fade-in-delay-3">
-                    <div class="widget-header">
-                        <h3 class="widget-title">Skills Gap</h3>
-                        <button class="widget-action" onclick="navigateTo('recommended-jobs')">Browse Jobs</button>
-                    </div>
-                    <div id="skills-gap-content">
-                        <div class="empty-state" style="padding: var(--space-4);">
-                            <p style="font-size: 0.813rem;">Upload a resume to see skills analysis.</p>
+                        <!-- Mini Laptop with Mountain Wallpaper -->
+                        <div class="cm-hero-laptop">
+                            <div class="cm-mini-screen">
+                                <div class="cm-mini-webcam"></div>
+                                <div class="cm-screen-mountain">
+                                    <svg viewBox="0 0 120 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <rect width="120" height="70" fill="#9FB5B0"/>
+                                        <path d="M 10 70 L 45 25 L 80 70 Z" fill="#3D5A52"/>
+                                        <path d="M 55 70 L 85 35 L 115 70 Z" fill="#29443D"/>
+                                        <path d="M 45 25 L 52 35 L 38 35 Z" fill="#FFFFFF" opacity="0.9"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="cm-mini-base"></div>
                         </div>
-                    </div>
-                </div>
 
-                <!-- AI Suggestions -->
-                <div class="widget fade-in-delay-4">
-                    <div class="widget-header">
-                        <h3 class="widget-title">AI Suggestions</h3>
-                    </div>
-                    <div id="ai-suggestions-content">
-                        <div class="empty-state" style="padding: var(--space-4);">
-                            <p style="font-size: 0.813rem;">Insights will appear after resume analysis.</p>
+                        <!-- Potted Houseplant -->
+                        <div class="cm-hero-plant">
+                            <svg width="60" height="85" viewBox="0 0 60 85" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M 30 50 C 15 35 10 20 12 5 C 25 10 30 28 30 50 Z" fill="#174D38" opacity="0.85"/>
+                                <path d="M 30 50 C 40 32 50 18 58 10 C 54 25 42 40 30 50 Z" fill="#24684E" opacity="0.9"/>
+                                <path d="M 30 50 C 24 32 26 15 32 5 C 37 15 35 32 30 50 Z" fill="#DCE8D9" opacity="0.75"/>
+                                <path d="M 16 52 L 44 52 L 40 82 L 20 82 Z" fill="#FAF6EE" stroke="#E9DFCE" stroke-width="1.2"/>
+                            </svg>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Bottom Row: Recent Activity -->
-            <div class="widget fade-in-delay-4">
-                <div class="widget-header">
-                    <h3 class="widget-title">Recent Activity</h3>
-                    <button class="widget-action" onclick="navigateTo('applications')">View All</button>
-                </div>
-                <div id="recent-activity-content">
-                    <div class="empty-state" style="padding: var(--space-6);">
-                        <div class="empty-state-icon"></div>
-                        <h3>No activity yet</h3>
-                        <p>Start by uploading your resume or browsing jobs.</p>
+            <!-- Row 1: Four Stat Cards -->
+            <div class="cm-dash-stats-grid" id="dashboard-stats">
+                <!-- Stat 1: Match Score -->
+                <div class="cm-stat-card">
+                    <div class="cm-stat-head">
+                        <div class="cm-stat-icon-wrap cm-icon-green">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"/>
+                                <circle cx="12" cy="12" r="6"/>
+                                <circle cx="12" cy="12" r="2"/>
+                            </svg>
+                        </div>
+                        <span class="cm-stat-trend">↑ +8%</span>
                     </div>
+                    <div class="cm-stat-value" id="stat-match-score">66%</div>
+                    <div class="cm-stat-label">Resume Match Score</div>
+                </div>
+
+                <!-- Stat 2: Applications Sent -->
+                <div class="cm-stat-card">
+                    <div class="cm-stat-head">
+                        <div class="cm-stat-icon-wrap cm-icon-sage">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <polyline points="14 2 14 8 20 8"/>
+                                <line x1="16" y1="13" x2="8" y2="13"/>
+                                <line x1="16" y1="17" x2="8" y2="17"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="cm-stat-value" id="stat-applications">0</div>
+                    <div class="cm-stat-label">Applications Sent</div>
+                </div>
+
+                <!-- Stat 3: Saved Jobs -->
+                <div class="cm-stat-card">
+                    <div class="cm-stat-head">
+                        <div class="cm-stat-icon-wrap cm-icon-purple">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="cm-stat-value" id="stat-saved">0</div>
+                    <div class="cm-stat-label">Saved Jobs</div>
+                </div>
+
+                <!-- Stat 4: Profile Completion -->
+                <div class="cm-stat-card">
+                    <div class="cm-stat-head">
+                        <div class="cm-stat-icon-wrap cm-icon-beige">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                <circle cx="12" cy="7" r="4"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="cm-stat-value" id="stat-profile">100%</div>
+                    <div class="cm-stat-label">Profile Completion</div>
+                </div>
+            </div>
+
+            <!-- Row 2: Three Main Analytic Cards -->
+            <div class="cm-dash-widgets-grid">
+                <!-- Card 1: Resume Health -->
+                <div class="cm-widget-card" id="widget-resume-health">
+                    <div class="cm-widget-head">
+                        <div class="cm-widget-title-wrap">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#174D38" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <polyline points="14 2 14 8 20 8"/>
+                            </svg>
+                            <h3 class="cm-widget-title">Resume Health</h3>
+                        </div>
+                        <button class="cm-widget-link-btn" onclick="navigateTo('profile')">View Profile &rarr;</button>
+                    </div>
+
+                    <div id="resume-health-content" class="cm-resume-health-box">
+                        <!-- Circular Score Gauge + Metrics -->
+                        <div class="cm-gauge-wrap">
+                            <svg class="cm-gauge-svg" viewBox="0 0 120 120">
+                                <circle class="cm-gauge-bg" cx="60" cy="60" r="48" stroke="#E5EEE3" stroke-width="10" fill="none"/>
+                                <circle class="cm-gauge-fill" id="resume-gauge-stroke" cx="60" cy="60" r="48" stroke="#174D38" stroke-width="10" fill="none" stroke-dasharray="301.6" stroke-dashoffset="45.2" stroke-linecap="round"/>
+                            </svg>
+                            <div class="cm-gauge-center">
+                                <span class="cm-gauge-number" id="resume-health-score-val">85</span>
+                                <span class="cm-gauge-denom">/100</span>
+                            </div>
+                        </div>
+
+                        <div class="cm-health-stats-list">
+                            <div class="cm-health-stat-row">
+                                <div class="cm-health-stat-left">
+                                    <span class="cm-health-ico">🛡️</span>
+                                    <span>Skills Detected</span>
+                                </div>
+                                <span class="cm-health-stat-val" id="health-skills-detected">21</span>
+                            </div>
+                            <div class="cm-health-stat-row">
+                                <div class="cm-health-stat-left">
+                                    <span class="cm-health-ico">📊</span>
+                                    <span>ATS Score</span>
+                                </div>
+                                <span class="cm-health-stat-val cm-val-green" id="health-ats-score">85%</span>
+                            </div>
+                            <div class="cm-health-stat-row">
+                                <div class="cm-health-stat-left">
+                                    <span class="cm-health-ico">✓</span>
+                                    <span>Completeness</span>
+                                </div>
+                                <span class="cm-health-stat-val" id="health-completeness">100%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2: Skills Gap -->
+                <div class="cm-widget-card" id="widget-skills-gap">
+                    <div class="cm-widget-head">
+                        <div class="cm-widget-title-wrap">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#174D38" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+                                <polyline points="2 17 12 22 22 17"/>
+                                <polyline points="2 12 12 17 22 12"/>
+                            </svg>
+                            <h3 class="cm-widget-title">Skills Gap</h3>
+                        </div>
+                        <button class="cm-widget-link-btn" onclick="navigateTo('recommended-jobs')">Browse Jobs &rarr;</button>
+                    </div>
+
+                    <div id="skills-gap-content" class="cm-skills-gap-box">
+                        <div class="cm-gap-subhead">
+                            <span class="cm-gap-label">YOUR SKILLS VS TRENDING</span>
+                            <span class="cm-gap-ratio" id="skills-gap-ratio">2/8 matched</span>
+                        </div>
+
+                        <div class="cm-gap-progress-track">
+                            <div class="cm-gap-progress-fill" id="skills-gap-bar" style="width: 25%;"></div>
+                        </div>
+
+                        <div class="cm-gap-tags-grid" id="skills-gap-tags">
+                            <span class="cm-skill-tag cm-tag-matched">✓ Python</span>
+                            <span class="cm-skill-tag cm-tag-matched">✓ Docker</span>
+                            <span class="cm-skill-tag cm-tag-missing">✕ React</span>
+                            <span class="cm-skill-tag cm-tag-missing">✕ TypeScript</span>
+                            <span class="cm-skill-tag cm-tag-missing">✕ AWS</span>
+                            <span class="cm-skill-tag cm-tag-missing">✕ Kubernetes</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3: AI Suggestions -->
+                <div class="cm-widget-card" id="widget-ai-suggestions">
+                    <div class="cm-widget-head">
+                        <div class="cm-widget-title-wrap">
+                            <span class="cm-sparkle-icon">✦</span>
+                            <h3 class="cm-widget-title">AI Suggestions</h3>
+                        </div>
+                    </div>
+
+                    <div id="ai-suggestions-content" class="cm-suggestions-list">
+                        <div class="cm-suggestion-item" onclick="navigateTo('profile')">
+                            <div class="cm-sugg-icon cm-sugg-chart">📈</div>
+                            <p class="cm-sugg-text">Add more quantifiable achievements to strengthen your resume impact.</p>
+                            <span class="cm-sugg-chevron">&rsaquo;</span>
+                        </div>
+
+                        <div class="cm-suggestion-item" onclick="navigateTo('recommended-jobs')">
+                            <div class="cm-sugg-icon cm-sugg-cloud">☁️</div>
+                            <p class="cm-sugg-text">Consider adding cloud certifications (e.g., AWS, Azure) to improve match scores.</p>
+                            <span class="cm-sugg-chevron">&rsaquo;</span>
+                        </div>
+
+                        <div class="cm-suggestion-item" onclick="navigateTo('recommended-jobs')">
+                            <div class="cm-sugg-icon cm-sugg-target">🎯</div>
+                            <p class="cm-sugg-text">Your profile matches well with Full-Stack and Backend roles.</p>
+                            <span class="cm-sugg-chevron">&rsaquo;</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Row 3: Two Bottom Cards (Recent Activity + Quick Actions) -->
+            <div class="cm-dash-bottom-grid">
+                <!-- Left: Recent Activity -->
+                <div class="cm-widget-card cm-bottom-card">
+                    <div class="cm-widget-head">
+                        <div class="cm-widget-title-wrap">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#174D38" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polyline points="12 6 12 12 16 14"/>
+                            </svg>
+                            <h3 class="cm-widget-title">Recent Activity</h3>
+                        </div>
+                        <button class="cm-widget-link-btn" onclick="navigateTo('applications')">View All &rarr;</button>
+                    </div>
+
+                    <div id="recent-activity-content" class="cm-activity-list">
+                        <div class="cm-activity-row">
+                            <div class="cm-act-icon-wrap">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#174D38" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                    <polyline points="17 8 12 3 7 8"/>
+                                    <line x1="12" y1="3" x2="12" y2="15"/>
+                                </svg>
+                            </div>
+                            <div class="cm-act-details">
+                                <div class="cm-act-title">Resume uploaded</div>
+                                <div class="cm-act-meta">resume_v3.pdf • 2 days ago</div>
+                            </div>
+                            <span class="cm-badge-pill cm-badge-completed">Completed</span>
+                        </div>
+
+                        <div class="cm-activity-row">
+                            <div class="cm-act-icon-wrap">
+                                <span style="font-size: 14px; color: #174D38;">✦</span>
+                            </div>
+                            <div class="cm-act-details">
+                                <div class="cm-act-title">Resume analysis completed</div>
+                                <div class="cm-act-meta">21 skills detected • 2 days ago</div>
+                            </div>
+                            <span class="cm-badge-pill cm-badge-completed">Completed</span>
+                        </div>
+
+                        <div class="cm-activity-row">
+                            <div class="cm-act-icon-wrap">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#174D38" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+                                    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                                </svg>
+                            </div>
+                            <div class="cm-act-details">
+                                <div class="cm-act-title">Job matches updated</div>
+                                <div class="cm-act-meta">New opportunities added • 1 day ago</div>
+                            </div>
+                            <span class="cm-badge-pill cm-badge-updated">Updated</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Quick Actions -->
+                <div class="cm-widget-card cm-bottom-card">
+                    <div class="cm-widget-head">
+                        <div class="cm-widget-title-wrap">
+                            <span style="font-size: 16px; color: #174D38;">⚡</span>
+                            <h3 class="cm-widget-title">Quick Actions</h3>
+                        </div>
+                    </div>
+
+                    <div class="cm-quick-actions-grid">
+                        <button class="cm-qa-btn cm-qa-primary" onclick="triggerDashboardResumeUpload()">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="17 8 12 3 7 8"/>
+                                <line x1="12" y1="3" x2="12" y2="15"/>
+                            </svg>
+                            <span>Upload<br>New Resume</span>
+                        </button>
+
+                        <button class="cm-qa-btn cm-qa-secondary" onclick="navigateTo('recommended-jobs')">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#174D38" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="11" cy="11" r="8"/>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                            </svg>
+                            <span>Explore<br>Jobs</span>
+                        </button>
+
+                        <button class="cm-qa-btn cm-qa-secondary" onclick="toggleChat()">
+                            <span style="font-size: 20px; color: #174D38;">✦</span>
+                            <span>Get<br>AI Insights</span>
+                        </button>
+                    </div>
+                    <input type="file" id="dashboard-hidden-resume-upload" accept=".pdf" style="display:none;" onchange="handleDashboardResumeUpload(event)">
                 </div>
             </div>
         </div>
     </template>
 
-    <!-- RECOMMENDED JOBS -->
+    <!-- RECOMMENDED JOBS (LUXURY MONOCHROME EDITORIAL) -->
     <template id="view-recommended-jobs">
-        <div class="fade-in">
-            <div class="page-header">
-                <h1>Recommended Jobs</h1>
-                <p>AI-matched opportunities based on your resume profile.</p>
+        <div class="rec-jobs-page fade-in">
+            <!-- 1. Editorial Header -->
+            <div class="rec-jobs-header">
+                <div class="rec-header-top">
+                    <h1 class="rec-editorial-title">
+                        Find Opportunities That Fit You.
+                    </h1>
+                    <p class="rec-editorial-subtitle">
+                        Discover jobs aligned with your skills, experience and career goals.
+                    </p>
+                </div>
+                
+                <div class="rec-career-stats-row" id="rec-career-stats">
+                    <div class="rec-stat-item">
+                        <span class="rec-stat-num" id="rec-stat-matched-count">--</span>
+                        <span class="rec-stat-label">Matched Opportunities</span>
+                    </div>
+                    <span class="rec-stat-divider">·</span>
+                    <div class="rec-stat-item">
+                        <span class="rec-stat-num" id="rec-stat-strong-count">--</span>
+                        <span class="rec-stat-label">Strong Matches</span>
+                    </div>
+                    <span class="rec-stat-divider">·</span>
+                    <div class="rec-stat-item">
+                        <span class="rec-stat-num" id="rec-stat-saved-count">0</span>
+                        <span class="rec-stat-label">Saved Jobs</span>
+                    </div>
+                </div>
             </div>
 
-            <!-- Filter Bar -->
-            <div class="filter-bar" id="job-filter-bar">
-                <input type="text" class="search-input" id="job-search-input" placeholder="Search by title, skill, or company..." oninput="debounceJobSearch()">
-                <select class="filter-select" id="filter-location" onchange="applyJobFilters()">
-                    <option value="">All Locations</option>
-                    <option value="remote">Remote</option>
-                    <option value="onsite">On-site</option>
-                </select>
-                <select class="filter-select" id="filter-experience" onchange="applyJobFilters()">
-                    <option value="">Experience Level</option>
-                    <option value="entry">Entry Level</option>
-                    <option value="mid">Mid Level</option>
-                    <option value="senior">Senior Level</option>
-                </select>
-                <select class="filter-select" id="filter-type" onchange="applyJobFilters()">
-                    <option value="">Employment Type</option>
-                    <option value="full-time">Full Time</option>
-                    <option value="part-time">Part Time</option>
-                    <option value="contract">Contract</option>
-                </select>
+            <!-- 2. Wide Elegant White Search Panel -->
+            <div class="rec-search-panel" id="job-filter-bar">
+                <div class="rec-search-field rec-field-keywords">
+                    <label for="job-search-input">Job Title / Keywords</label>
+                    <div class="rec-input-wrapper">
+                        <svg class="rec-input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                            <circle cx="11" cy="11" r="8"/>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                        </svg>
+                        <input type="text" id="job-search-input" placeholder="e.g. UI Designer, Backend Developer" oninput="debounceJobSearch()">
+                    </div>
+                </div>
+                <div class="rec-search-field rec-field-location">
+                    <label for="filter-location">Location</label>
+                    <div class="rec-select-wrapper">
+                        <select id="filter-location" onchange="applyJobFilters()">
+                            <option value="">All Locations (e.g. Remote, NY)</option>
+                            <option value="remote">Remote</option>
+                            <option value="onsite">On-site</option>
+                            <option value="hybrid">Hybrid</option>
+                        </select>
+                        <span class="rec-chevron">▾</span>
+                    </div>
+                </div>
+                <div class="rec-search-field rec-field-experience">
+                    <label for="filter-experience">Experience Level</label>
+                    <div class="rec-select-wrapper">
+                        <select id="filter-experience" onchange="applyJobFilters()">
+                            <option value="">Select Experience Level</option>
+                            <option value="entry">Entry Level</option>
+                            <option value="mid">Mid Level</option>
+                            <option value="senior">Senior Level</option>
+                            <option value="lead">Lead / Principal</option>
+                        </select>
+                        <span class="rec-chevron">▾</span>
+                    </div>
+                </div>
+                <div class="rec-search-field rec-field-type">
+                    <label for="filter-type">Job Type</label>
+                    <div class="rec-select-wrapper">
+                        <select id="filter-type" onchange="applyJobFilters()">
+                            <option value="">Select Job Type</option>
+                            <option value="full-time">Full time</option>
+                            <option value="part-time">Part time</option>
+                            <option value="contract">Contract</option>
+                            <option value="internship">Internship</option>
+                        </select>
+                        <span class="rec-chevron">▾</span>
+                    </div>
+                </div>
+                <div class="rec-search-action">
+                    <button class="rec-search-btn" onclick="applyJobFilters()">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <circle cx="11" cy="11" r="8"/>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                        </svg>
+                        <span>Search</span>
+                    </button>
+                </div>
             </div>
 
-            <!-- Job Grid -->
-            <div class="job-grid" id="recommended-jobs-grid">
-                <!-- Job cards rendered by JS -->
-            </div>
+            <!-- 3. Asymmetric Grid Layout -->
+            <div class="rec-layout-grid">
+                <!-- Left Rail: AI Upload Card & Secondary Filters -->
+                <aside class="rec-left-rail">
+                    <!-- Card 1: AI Upload Dropzone -->
+                    <div class="rec-rail-card rec-upload-card">
+                        <h3 class="rec-rail-title">Let AI find your ideal job</h3>
+                        <p class="rec-rail-sub">Upload your CV and get matched instantly</p>
+                        
+                        <div class="rec-dropzone" id="rec-quick-dropzone" onclick="document.getElementById('rec-quick-resume-file').click()">
+                            <input type="file" id="rec-quick-resume-file" accept=".pdf" style="display: none;" onchange="handleQuickResumeUpload(event)">
+                            <div class="rec-dropzone-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#777777" stroke-width="1.8">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                </svg>
+                            </div>
+                            <span class="rec-dropzone-text" id="rec-dropzone-label">Click and paste anywhere in this box.</span>
+                            <span class="rec-dropzone-hint">PDF up to 10MB</span>
+                        </div>
 
-            <!-- Pagination -->
-            <div class="pagination" id="jobs-pagination"></div>
+                        <button class="rec-btn-match" onclick="document.getElementById('rec-quick-resume-file').click()">
+                            Get Matched
+                        </button>
+                    </div>
+
+                    <!-- Card 2: Secondary Filters -->
+                    <div class="rec-rail-card rec-filters-card">
+                        <div class="rec-filter-group">
+                            <label class="rec-filter-label" for="filter-company-input">Company / Industry</label>
+                            <input type="text" id="filter-company-input" class="rec-rail-input" placeholder="e.g. Google, Amazon, Design" oninput="applySecondaryJobFilters()">
+                        </div>
+
+                        <div class="rec-filter-group">
+                            <label class="rec-filter-label" for="filter-schedule-select">Work Schedule</label>
+                            <select id="filter-schedule-select" class="rec-rail-select" onchange="applySecondaryJobFilters()">
+                                <option value="">Flexible Hours / Any</option>
+                                <option value="remote">Remote Only</option>
+                                <option value="flexible">Flexible Hours</option>
+                                <option value="onsite">On-Site</option>
+                            </select>
+                        </div>
+
+                        <div class="rec-filter-group">
+                            <div class="rec-filter-label-row">
+                                <label class="rec-filter-label" for="filter-salary-slider">Salary Range</label>
+                                <span class="rec-salary-display" id="salary-range-display">$30K+</span>
+                            </div>
+                            <input type="range" id="filter-salary-slider" min="30" max="200" step="10" value="30" class="rec-salary-slider" oninput="handleSalarySliderChange(this.value)">
+                            <div class="rec-slider-ticks">
+                                <span>$35K</span>
+                                <span>$100K</span>
+                                <span>$200K+</span>
+                            </div>
+                        </div>
+
+                        <div class="rec-filter-group">
+                            <label class="rec-filter-label">Quick Tags</label>
+                            <div class="rec-quick-tag-pills">
+                                <button type="button" class="rec-pill-filter" onclick="toggleQuickTagFilter(this, 'Remote')">Remote</button>
+                                <button type="button" class="rec-pill-filter" onclick="toggleQuickTagFilter(this, 'Design')">Design</button>
+                                <button type="button" class="rec-pill-filter" onclick="toggleQuickTagFilter(this, 'Engineering')">Engineering</button>
+                                <button type="button" class="rec-pill-filter" onclick="toggleQuickTagFilter(this, 'AI')">AI / ML</button>
+                            </div>
+                        </div>
+
+                        <button class="rec-btn-reset-filters" onclick="resetJobFilters()">
+                            Clear All Filters
+                        </button>
+                    </div>
+                </aside>
+
+                <!-- Right Column: Results Bar, Responsive Job Grid & Pagination -->
+                <main class="rec-right-content">
+                    <div class="rec-results-bar">
+                        <span class="rec-results-count" id="rec-jobs-count-text">Curated Opportunities</span>
+                        <div class="rec-sort-wrap">
+                            <span class="rec-sort-label">Sort by:</span>
+                            <select id="rec-sort-select" class="rec-sort-select" onchange="handleJobSortChange()">
+                                <option value="match">Highest Match</option>
+                                <option value="recent">Most Recent</option>
+                                <option value="salary">Salary (High to Low)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Responsive Job Cards Grid -->
+                    <div class="rec-job-grid" id="recommended-jobs-grid">
+                        <!-- Rendered by JS -->
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="pagination rec-pagination" id="jobs-pagination"></div>
+                </main>
+            </div>
         </div>
     </template>
 
@@ -393,75 +1621,200 @@
 
     <!-- PROFILE -->
     <template id="view-profile">
-        <div class="fade-in profile-layout">
-            <div class="page-header">
-                <h1>My Profile</h1>
-                <p>Manage your professional profile and resume.</p>
-            </div>
-
-            <!-- Profile Cover + Avatar -->
-            <div style="position:relative; margin-bottom: var(--space-5);">
-                <div class="profile-cover"></div>
-                <div class="profile-avatar-lg" id="profile-avatar">?</div>
-                <div class="profile-header-info">
-                    <h2 id="profile-name">—</h2>
-                    <p id="profile-email">—</p>
-                </div>
-            </div>
-
-            <!-- Resume Upload Section -->
-            <div class="profile-section">
-                <div class="profile-section-header">
-                    <h3>Resume</h3>
-                </div>
-                <form id="profile-upload-form" onsubmit="handleResumeUpload(event)">
-                    <div class="upload-zone" id="profile-upload-zone" style="padding: var(--space-6);">
-                        <input type="file" id="resume-file" accept=".pdf" onchange="handleResumeUpload(event)">
-                        <div class="upload-zone-icon" style="font-size: 2rem;"></div>
-                        <h3 style="font-size: 1rem;">Upload or replace your resume</h3>
-                        <p>Drag & drop a PDF file or click to browse</p>
+        <div class="pf-page">
+            <div id="pf-loading" class="pf-loading" role="status">Loading your profile…</div>
+            <div id="pf-content" class="hidden">
+                <header class="pf-header">
+                    <div>
+                        <h1>My Profile</h1>
+                        <p>Manage your professional profile and resume.</p>
+                        <p id="pf-dirty" class="pf-dirty" hidden>All changes saved</p>
                     </div>
-                </form>
-                <div id="profile-upload-status" style="margin-top: var(--space-3);"></div>
-            </div>
+                    <div class="pf-action-buttons">
+                        <button type="button" class="pf-btn pf-btn-secondary" id="pf-discard">Discard</button>
+                        <button type="button" class="pf-btn pf-btn-primary" id="pf-save">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                            <span id="pf-save-label">Save Changes</span>
+                        </button>
+                    </div>
+                </header>
+                <div id="pf-banner" class="pf-banner hidden" role="status"></div>
+                <div class="pf-layout">
+                    <div class="pf-side">
+                        <section class="pf-card pf-identity" aria-labelledby="pf-identity-title">
+                            <h2 id="pf-identity-title" class="pf-sr-only">Personal details</h2>
+                            <button type="button" class="pf-icon-btn pf-edit-corner" id="pf-edit-name" aria-label="Edit name">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>
+                            </button>
+                            <div class="pf-person">
+                                <div class="pf-avatar-wrap">
+                                    <button type="button" class="pf-avatar" id="pf-avatar-btn" aria-label="Profile photo">
+                                        <img id="pf-avatar-img" alt="" hidden>
+                                        <span id="pf-avatar-initials">?</span>
+                                    </button>
+                                    <button type="button" class="pf-camera" id="pf-photo-change" aria-label="Upload profile photo">
+                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                                    </button>
+                                </div>
+                                <div class="pf-person-copy">
+                                    <label class="pf-sr-only" for="pf-name">Full name</label>
+                                    <input id="pf-name" class="pf-plain pf-name-input" type="text" maxlength="80" autocomplete="name" placeholder="Your name">
+                                    <label class="pf-sr-only" for="pf-email">Email</label>
+                                    <input id="pf-email" class="pf-plain pf-email-input" type="email" maxlength="254" autocomplete="email" required placeholder="you@email.com">
+                                </div>
+                            </div>
+                            <small id="pf-error-full_name" class="pf-field-error"></small>
+                            <small id="pf-error-email" class="pf-field-error"></small>
+                            <div class="pf-title-row">
+                                <label class="pf-sr-only" for="pf-title">Professional title</label>
+                                <input id="pf-title" class="pf-plain pf-title-input" type="text" maxlength="120" autocomplete="organization-title" placeholder="Add a professional title (e.g. ML Engineer)">
+                                <button type="button" class="pf-icon-btn" id="pf-edit-title" aria-label="Edit professional title">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>
+                                </button>
+                            </div>
+                            <small id="pf-error-professional_title" class="pf-field-error"></small>
+                            <button type="button" class="pf-text-btn" id="pf-photo-remove" hidden>Remove photo</button>
+                            <input type="file" id="pf-photo-input" class="pf-sr-only" accept="image/jpeg,image/png,image/webp">
+                            <div class="pf-complete">
+                                <div class="pf-complete-head">
+                                    <span>Profile Completeness</span>
+                                    <strong id="pf-complete-percent">0%</strong>
+                                </div>
+                                <div class="pf-complete-track" aria-hidden="true"><span id="pf-complete-fill"></span></div>
+                            </div>
+                        </section>
 
-            <!-- Skills Section -->
-            <div class="profile-section">
-                <div class="profile-section-header">
-                    <h3>Skills</h3>
-                </div>
-                <div id="profile-skills-container" class="skills-container">
-                    <p class="text-secondary" style="font-size: 0.813rem;">Upload a resume to extract your skills.</p>
-                </div>
-            </div>
+                        <section class="pf-card" aria-labelledby="pf-resume-title">
+                            <div class="pf-section-head">
+                                <span class="pf-section-icon" aria-hidden="true">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                                </span>
+                                <h2 id="pf-resume-title">Resume</h2>
+                            </div>
+                            <div class="pf-dropzone" id="pf-dropzone">
+                                <span class="pf-dropzone-badge" aria-hidden="true">
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 12 15 15"/></svg>
+                                </span>
+                                <span id="pf-dropzone-title" class="pf-dropzone-title">Upload or replace your resume</span>
+                                <span id="pf-dropzone-hint" class="pf-hint">Drag and drop a PDF file here or click to browse</span>
+                                <button type="button" class="pf-btn pf-btn-primary pf-choose" id="pf-choose-file">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                                    Choose File
+                                </button>
+                                <span class="pf-file-note">Supports PDF (max 5 MB)</span>
+                            </div>
+                            <input id="pf-resume-file" class="pf-sr-only" type="file" accept="application/pdf,.pdf">
+                            <p id="pf-resume-status" class="pf-status" role="status"></p>
+                        </section>
+                    </div>
 
-            <!-- Experience Section -->
-            <div class="profile-section">
-                <div class="profile-section-header">
-                    <h3>Experience</h3>
-                </div>
-                <div id="profile-experience-container">
-                    <p class="text-secondary" style="font-size: 0.813rem;">Upload a resume to extract your experience.</p>
-                </div>
-            </div>
+                    <div class="pf-main">
+                        <section class="pf-card" aria-labelledby="pf-skills-title">
+                            <div class="pf-section-head">
+                                <span class="pf-section-icon" aria-hidden="true">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2l2.4 4.8L20 8l-4 3.8.9 5.2L12 14.8 7.1 17l.9-5.2L4 8l5.6-1.2z"/></svg>
+                                </span>
+                                <div class="pf-section-copy">
+                                    <h2 id="pf-skills-title">Skills</h2>
+                                    <p>Add the key skills from your resume.</p>
+                                </div>
+                                <button type="button" class="pf-add-link" id="pf-skill-toggle">+ Add Skills</button>
+                            </div>
+                            <div id="pf-skills" class="pf-skills"></div>
+                            <div class="pf-skill-add hidden" id="pf-skill-row">
+                                <label class="pf-sr-only" for="pf-skill-input">Add a skill</label>
+                                <input id="pf-skill-input" class="pf-input" type="text" maxlength="40" placeholder="Add a skill">
+                                <button type="button" class="pf-btn pf-btn-primary pf-btn-small" id="pf-skill-add">Add</button>
+                            </div>
+                            <small id="pf-error-skills" class="pf-field-error"></small>
+                        </section>
 
-            <!-- Education Section -->
-            <div class="profile-section">
-                <div class="profile-section-header">
-                    <h3>Education</h3>
-                </div>
-                <div id="profile-education-container">
-                    <p class="text-secondary" style="font-size: 0.813rem;">Education info will be available after resume analysis.</p>
-                </div>
-            </div>
+                        <section class="pf-card" aria-labelledby="pf-experience-title">
+                            <div class="pf-section-head">
+                                <span class="pf-section-icon" aria-hidden="true">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+                                </span>
+                                <div class="pf-section-copy">
+                                    <h2 id="pf-experience-title">Experience</h2>
+                                    <p>Add your work experience, internships or key projects.</p>
+                                </div>
+                                <button type="button" class="pf-add-link" data-pf-action="toggle-experience">+ Add Experience</button>
+                            </div>
+                            <div id="pf-experience-summary"></div>
+                            <div id="pf-experience-list" class="pf-entries"></div>
+                            <div id="pf-experience-form" class="pf-form hidden">
+                                <p id="pf-exp-error" class="pf-field-error" role="alert"></p>
+                                <div class="pf-form-grid">
+                                    <label class="pf-field" for="pf-exp-role"><span>Role</span><input id="pf-exp-role" class="pf-input" type="text" maxlength="120"></label>
+                                    <label class="pf-field" for="pf-exp-company"><span>Company</span><input id="pf-exp-company" class="pf-input" type="text" maxlength="120"></label>
+                                    <label class="pf-field" for="pf-exp-start"><span>Start</span><input id="pf-exp-start" class="pf-input" type="month"></label>
+                                    <label class="pf-field" for="pf-exp-end"><span>End</span><input id="pf-exp-end" class="pf-input" type="month"></label>
+                                </div>
+                                <label class="pf-checkline" for="pf-exp-current"><input id="pf-exp-current" type="checkbox"> I currently work here</label>
+                                <label class="pf-field" for="pf-exp-description"><span>Description</span><textarea id="pf-exp-description" class="pf-input pf-textarea" maxlength="2000" rows="4" placeholder="What did you work on?"></textarea></label>
+                                <div class="pf-form-actions">
+                                    <button type="button" class="pf-btn pf-btn-primary" id="pf-exp-submit" data-pf-action="submit-experience">Add experience</button>
+                                    <button type="button" class="pf-btn pf-btn-ghost" data-pf-action="cancel-form" data-pf-form="experience">Cancel</button>
+                                </div>
+                            </div>
+                        </section>
 
-            <!-- Certifications Section -->
-            <div class="profile-section">
-                <div class="profile-section-header">
-                    <h3>Certifications</h3>
-                </div>
-                <div id="profile-certs-container">
-                    <p class="text-secondary" style="font-size: 0.813rem;">Certifications will be available after resume analysis.</p>
+                        <section class="pf-card" aria-labelledby="pf-education-title">
+                            <div class="pf-section-head">
+                                <span class="pf-section-icon" aria-hidden="true">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 2 9 2 12 0v-5"/></svg>
+                                </span>
+                                <div class="pf-section-copy">
+                                    <h2 id="pf-education-title">Education</h2>
+                                    <p>Add your educational background.</p>
+                                </div>
+                                <button type="button" class="pf-add-link" data-pf-action="toggle-education">+ Add Education</button>
+                            </div>
+                            <div id="pf-education-summary"></div>
+                            <div id="pf-education-list" class="pf-entries"></div>
+                            <div id="pf-education-form" class="pf-form hidden">
+                                <p id="pf-edu-error" class="pf-field-error" role="alert"></p>
+                                <div class="pf-form-grid">
+                                    <label class="pf-field" for="pf-edu-school"><span>School</span><input id="pf-edu-school" class="pf-input" type="text" maxlength="160"></label>
+                                    <label class="pf-field" for="pf-edu-degree"><span>Degree</span><input id="pf-edu-degree" class="pf-input" type="text" maxlength="160"></label>
+                                    <label class="pf-field" for="pf-edu-field"><span>Field of study</span><input id="pf-edu-field" class="pf-input" type="text" maxlength="120"></label>
+                                    <label class="pf-field" for="pf-edu-start"><span>Start year</span><input id="pf-edu-start" class="pf-input" type="text" inputmode="numeric" maxlength="4" placeholder="YYYY"></label>
+                                    <label class="pf-field" for="pf-edu-end"><span>End year</span><input id="pf-edu-end" class="pf-input" type="text" inputmode="numeric" maxlength="4" placeholder="YYYY"></label>
+                                </div>
+                                <div class="pf-form-actions">
+                                    <button type="button" class="pf-btn pf-btn-primary" id="pf-edu-submit" data-pf-action="submit-education">Add education</button>
+                                    <button type="button" class="pf-btn pf-btn-ghost" data-pf-action="cancel-form" data-pf-form="education">Cancel</button>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="pf-card" aria-labelledby="pf-cert-title">
+                            <div class="pf-section-head">
+                                <span class="pf-section-icon" aria-hidden="true">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="6"/><path d="M8.5 13.5L7 22l5-3 5 3-1.5-8.5"/></svg>
+                                </span>
+                                <div class="pf-section-copy">
+                                    <h2 id="pf-cert-title">Certifications</h2>
+                                    <p>Add relevant certifications to showcase your skills.</p>
+                                </div>
+                                <button type="button" class="pf-add-link" data-pf-action="toggle-certification">+ Add Certification</button>
+                            </div>
+                            <div id="pf-cert-list" class="pf-entries"></div>
+                            <div id="pf-cert-form" class="pf-form hidden">
+                                <p id="pf-cert-error" class="pf-field-error" role="alert"></p>
+                                <div class="pf-form-grid">
+                                    <label class="pf-field" for="pf-cert-name"><span>Certification</span><input id="pf-cert-name" class="pf-input" type="text" maxlength="160"></label>
+                                    <label class="pf-field" for="pf-cert-issuer"><span>Issuer</span><input id="pf-cert-issuer" class="pf-input" type="text" maxlength="160"></label>
+                                    <label class="pf-field" for="pf-cert-year"><span>Year</span><input id="pf-cert-year" class="pf-input" type="text" inputmode="numeric" maxlength="4" placeholder="YYYY"></label>
+                                </div>
+                                <div class="pf-form-actions">
+                                    <button type="button" class="pf-btn pf-btn-primary" id="pf-cert-submit" data-pf-action="submit-certification">Add certification</button>
+                                    <button type="button" class="pf-btn pf-btn-ghost" data-pf-action="cancel-form" data-pf-form="certification">Cancel</button>
+                                </div>
+                            </div>
+                        </section>
+
+                    </div>
                 </div>
             </div>
         </div>
@@ -583,6 +1936,7 @@
     <div id="toast-container" class="toast-container"></div>
 
     <script src="/app.js"></script>
+    <script src="/profile.js"></script>
 </body>
 
 </html>
