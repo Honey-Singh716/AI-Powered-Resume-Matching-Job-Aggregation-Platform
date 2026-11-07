@@ -23,6 +23,7 @@ def set_verification_token(user, token_hash, expires_at, sent_at, db):
     user.verification_token_hash = token_hash
     user.verification_token_expires_at = expires_at
     user.verification_token_sent_at = sent_at
+    user.verification_attempts = 0
     user.is_verified = False
 
     db.add(user)
@@ -35,6 +36,7 @@ def clear_verification_token(user, db):
     user.verification_token_hash = None
     user.verification_token_expires_at = None
     user.verification_token_sent_at = None
+    user.verification_attempts = 0
 
     db.add(user)
     db.commit()

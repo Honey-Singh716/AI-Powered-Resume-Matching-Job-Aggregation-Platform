@@ -48,6 +48,13 @@ _redis_close_patch.start()
 from main import app  # noqa: E402  (import after patches)
 from database import Base, get_db  # noqa: E402
 
+# Never call Resend during the default test run.
+_otp_mail_patch = patch(
+    "services.user_services.send_verification_email",
+    return_value={"accepted": True, "provider_id": "test-email"},
+)
+_otp_mail_patch.start()
+
 # ── SQLite in-memory engine for tests ────────────────────────────────────────
 TEST_DB_URL = os.environ["DATABASE_URL"]
 

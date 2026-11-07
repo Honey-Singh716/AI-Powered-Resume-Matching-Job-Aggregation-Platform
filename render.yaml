@@ -63,6 +63,6 @@ services:
       - key: CORS_ORIGINS
         sync: false
 
-      # Optional: n8n OTP webhook URL for email verification
+      # Legacy n8n webhook. Verification email is sent by Resend; this is unused.
       - key: N8N_OTP_WEBHOOK_URL
         sync: false

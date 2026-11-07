@@ -13,6 +13,9 @@ ALTER TABLE users
 ALTER TABLE users
   ADD COLUMN IF NOT EXISTS verification_token_sent_at TIMESTAMP WITH TIME ZONE;
 
+ALTER TABLE users
+  ADD COLUMN IF NOT EXISTS verification_attempts INTEGER NOT NULL DEFAULT 0;
+
 UPDATE users
 SET is_verified = FALSE
 WHERE is_verified IS NULL;

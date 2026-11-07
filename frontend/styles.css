@@ -2067,6 +2067,61 @@ body:has(.cm-dashboard-page) #main-content {
     font-weight: 700;
 }
 
+.cm-otp-digits {
+    display: flex;
+    gap: 8px;
+    justify-content: space-between;
+}
+
+.cm-otp-digit {
+    width: 48px;
+    height: 54px;
+    text-align: center;
+    font-size: 1.35rem;
+    font-weight: 700;
+    border: 1px solid var(--cm-beige, #E9DFCE);
+    border-radius: 12px;
+    background: #fff;
+    color: var(--cm-charcoal, #1C1917);
+    font-family: inherit;
+}
+
+.cm-otp-digit:focus {
+    outline: none;
+    border-color: var(--cm-forest, #174D38);
+    box-shadow: 0 0 0 3px rgba(23, 77, 56, 0.12);
+}
+
+.cm-otp-timer {
+    min-height: 1.2em;
+    margin: 0 0 12px;
+    color: #6B7280;
+    font-size: 0.82rem;
+}
+
+.cm-otp-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 14px;
+}
+
+.cm-otp-text-btn {
+    border: 0;
+    background: transparent;
+    color: var(--cm-forest, #174D38);
+    font: inherit;
+    font-size: 0.86rem;
+    font-weight: 650;
+    cursor: pointer;
+    padding: 0;
+}
+
+.cm-otp-text-btn:disabled {
+    color: #9CA3AF;
+    cursor: not-allowed;
+}
+
 /* Mobile & Tablet Responsiveness */
 @media (max-width: 1024px) {
     .cm-auth-container {

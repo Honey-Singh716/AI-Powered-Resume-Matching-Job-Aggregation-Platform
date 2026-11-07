@@ -43,6 +43,8 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         if (hash === '/login') {
             navigateTo('login');
+        } else if (hash === '/otp') {
+            navigateTo('otp');
         } else {
             navigateTo('landing');
         }
@@ -69,6 +71,7 @@ function navigateFromHash(hash) {
         '/applications': 'applications',
         '/profile': 'profile',
         '/resume': 'profile',
+        '/otp': 'otp',
     };
 
     const viewId = routeMap[hash];
@@ -187,6 +190,7 @@ function navigateTo(viewId, pushHash = true) {
         case 'saved-jobs': initSavedJobs(); break;
         case 'applications': initApplications(); break;
         case 'profile': initProfile(); break;
+        case 'otp': initOtpPage(); break;
     }
 
     // Scroll to top
@@ -573,23 +577,23 @@ async function handleAuth(e) {
         if (!isLoginMode) {
             const registration = await apiCall('/users/register', 'POST', { email, password, role });
             if (registration.verified === true) {
-                // Email verification is disabled — account is ready to use immediately
                 showToast('Account created! You can now sign in.');
                 switchAuthTab('login');
                 document.getElementById('auth-email').value = email;
                 errorDiv.className = 'form-success';
                 errorDiv.textContent = registration.detail || 'Account created successfully! Please sign in below.';
-            } else if (registration.verification_email_sent === false) {
-                // Account saved but email delivery failed
-                errorDiv.className = 'form-error';
-                errorDiv.textContent = registration.detail || 'Account created, but the verification email could not be sent.';
             } else {
-                showToast('Account created. OTP sent to your email.');
+                sessionStorage.setItem('otpEmail', email);
+                if (registration.verification_email_sent === false) {
+                    sessionStorage.setItem('otpNotice', registration.detail || 'Account created, but the verification email could not be sent.');
+                    sessionStorage.removeItem('otpCooldownUntil');
+                } else {
+                    sessionStorage.removeItem('otpNotice');
+                    const wait = Number(registration.retry_after_seconds) || 60;
+                    sessionStorage.setItem('otpCooldownUntil', String(Date.now() + wait * 1000));
+                    showToast('Account created. Check your email for the verification code.');
+                }
                 navigateTo('otp');
-                setTimeout(() => {
-                    const otpEmailEl = document.getElementById('otp-email');
-                    if (otpEmailEl) otpEmailEl.value = email;
-                }, 100);
             }
             return;
         }
@@ -611,8 +615,16 @@ async function handleAuth(e) {
             // If the server says the user needs to verify their email, show resend option
             const needsVerify = msg.toLowerCase().includes('verify');
             if (needsVerify) {
+                sessionStorage.setItem('otpEmail', email);
                 errorDiv.className = 'form-error';
-                errorDiv.innerHTML = `${msg}<br><a href="#" style="color:var(--primary); font-weight:600;" onclick="navigateTo('otp'); setTimeout(() => { document.getElementById('otp-email').value = '${email}'; }, 100); return false;">Verify OTP &rarr;</a>`;
+                errorDiv.innerHTML = `${msg}<br><a href="#" id="go-verify-otp" style="color:var(--primary); font-weight:600;">Verify OTP &rarr;</a>`;
+                const verifyLink = document.getElementById('go-verify-otp');
+                if (verifyLink) {
+                    verifyLink.addEventListener('click', (event) => {
+                        event.preventDefault();
+                        navigateTo('otp');
+                    });
+                }
             } else {
                 throw new Error(msg);
             }
@@ -653,16 +665,127 @@ async function handleAuth(e) {
     }
 }
 
+let otpCooldownTimer = null;
+
+function otpCodeValue() {
+    return Array.from(document.querySelectorAll('.cm-otp-digit')).map((input) => input.value).join('');
+}
+
+function setOtpMessage(text, kind) {
+    const errorDiv = document.getElementById('otp-error');
+    if (!errorDiv) return;
+    errorDiv.className = kind === 'success' ? 'cm-form-success' : 'cm-form-error';
+    errorDiv.textContent = text || '';
+}
+
+function startOtpCooldown(seconds) {
+    const button = document.getElementById('otp-resend');
+    const timer = document.getElementById('otp-timer');
+    const until = Date.now() + Math.max(0, seconds) * 1000;
+    sessionStorage.setItem('otpCooldownUntil', String(until));
+    if (otpCooldownTimer) clearInterval(otpCooldownTimer);
+
+    const paint = () => {
+        const remaining = Math.ceil((Number(sessionStorage.getItem('otpCooldownUntil') || 0) - Date.now()) / 1000);
+        if (remaining > 0) {
+            if (button) button.disabled = true;
+            if (timer) timer.textContent = `You can request another code in ${remaining}s.`;
+            return;
+        }
+        if (button) button.disabled = false;
+        if (timer) timer.textContent = '';
+        if (otpCooldownTimer) clearInterval(otpCooldownTimer);
+    };
+    paint();
+    otpCooldownTimer = setInterval(paint, 1000);
+}
+
+function initOtpPage() {
+    const email = sessionStorage.getItem('otpEmail') || '';
+    const emailInput = document.getElementById('otp-email');
+    if (emailInput) emailInput.value = email;
+    const notice = sessionStorage.getItem('otpNotice');
+    if (notice) setOtpMessage(notice, 'error');
+    const digits = Array.from(document.querySelectorAll('.cm-otp-digit'));
+    digits.forEach((input, index) => {
+        input.addEventListener('input', () => {
+            input.value = input.value.replace(/\D/g, '').slice(0, 1);
+            if (input.value && digits[index + 1]) digits[index + 1].focus();
+        });
+        input.addEventListener('keydown', (event) => {
+            if (event.key === 'Backspace' && !input.value && digits[index - 1]) {
+                digits[index - 1].focus();
+            }
+        });
+        input.addEventListener('paste', (event) => {
+            event.preventDefault();
+            const pasted = (event.clipboardData.getData('text') || '').replace(/\D/g, '').slice(0, 6);
+            pasted.split('').forEach((char, offset) => {
+                if (digits[offset]) digits[offset].value = char;
+            });
+            const target = digits[Math.min(pasted.length, 5)];
+            if (target) target.focus();
+        });
+    });
+    if (digits[0]) digits[0].focus();
+    const remaining = Math.ceil((Number(sessionStorage.getItem('otpCooldownUntil') || 0) - Date.now()) / 1000);
+    if (remaining > 0) startOtpCooldown(remaining);
+    const changeEmail = document.getElementById('otp-change-email');
+    if (changeEmail) {
+        changeEmail.addEventListener('click', (event) => {
+            event.preventDefault();
+            navigateTo('login');
+            setTimeout(() => {
+                switchAuthTab('register');
+                const authEmail = document.getElementById('auth-email');
+                if (authEmail) authEmail.value = email;
+            }, 50);
+        });
+    }
+}
+
+async function handleResendOTP() {
+    const email = document.getElementById('otp-email').value.trim();
+    const button = document.getElementById('otp-resend');
+    if (!email) {
+        setOtpMessage('Enter the email address you used to register.', 'error');
+        return;
+    }
+    if (button) button.disabled = true;
+    setOtpMessage('', 'error');
+    try {
+        const response = await fetch(`${API_URL}/auth/resend-otp`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email }),
+        });
+        let data = {};
+        try { data = await response.json(); } catch (_) { data = {}; }
+        if (!response.ok) throw new Error('We could not send a verification email right now. Please try again shortly.');
+        sessionStorage.removeItem('otpNotice');
+        setOtpMessage(data.detail || 'If an account is waiting for verification, a new code has been sent.', data.detail && data.detail.toLowerCase().includes('could not') ? 'error' : 'success');
+        startOtpCooldown(Number(data.retry_after_seconds) || 60);
+    } catch (err) {
+        setOtpMessage(err.message || 'We could not send a verification email right now.', 'error');
+        if (button) button.disabled = false;
+    }
+}
+
 async function handleVerifyOTP(e) {
     e.preventDefault();
-    const email = document.getElementById('otp-email').value;
-    const otp = document.getElementById('otp-code').value;
-    const errorDiv = document.getElementById('otp-error');
+    const email = document.getElementById('otp-email').value.trim();
+    const otp = otpCodeValue();
     const submitBtn = document.getElementById('otp-submit');
+    const label = submitBtn ? submitBtn.querySelector('span') : null;
 
-    submitBtn.disabled = true;
-    errorDiv.className = 'form-error';
-    errorDiv.innerHTML = '';
+    if (!/^\d{6}$/.test(otp)) {
+        setOtpMessage('Enter the 6-digit code from your email.', 'error');
+        return;
+    }
+
+    if (submitBtn) submitBtn.disabled = true;
+    if (label) label.textContent = 'Verifying...';
+    setOtpMessage('', 'error');
 
     try {
         const res = await fetch(`${API_URL}/auth/verify-email`, {
@@ -670,27 +793,30 @@ async function handleVerifyOTP(e) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, otp })
         });
-        
+
         let data;
-        try { data = await res.json(); } catch(_) { data = {}; }
+        try { data = await res.json(); } catch (_) { data = {}; }
 
         if (!res.ok) {
-            throw new Error(data.detail || 'Invalid OTP');
+            const detail = data.detail;
+            throw new Error(typeof detail === 'string' ? detail : 'Invalid or expired code.');
         }
 
-        showToast('Email verified successfully.');
+        sessionStorage.removeItem('otpNotice');
+        sessionStorage.removeItem('otpCooldownUntil');
+        showToast('Email verified. You can sign in now.');
         navigateTo('login');
-        
+
         setTimeout(() => {
             const authEmailEl = document.getElementById('auth-email');
             if (authEmailEl) authEmailEl.value = email;
             switchAuthTab('login');
         }, 100);
     } catch (err) {
-        errorDiv.className = 'form-error';
-        errorDiv.textContent = err.message || 'OTP verification failed';
+        setOtpMessage(err.message || 'OTP verification failed', 'error');
     } finally {
-        submitBtn.disabled = false;
+        if (submitBtn) submitBtn.disabled = false;
+        if (label) label.textContent = 'Verify Email';
     }
 }
 

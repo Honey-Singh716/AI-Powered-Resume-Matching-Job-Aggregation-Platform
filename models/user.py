@@ -58,6 +58,13 @@ class User(Base):
         nullable=True
     )
 
+    verification_attempts = Column(
+        Integer,
+        nullable=False,
+        default=0,
+        server_default="0",
+    )
+
     created_at = Column(
         DateTime,
         server_default=func.now(),

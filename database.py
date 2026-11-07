@@ -35,21 +35,26 @@ def ensure_user_verification_columns():
             return
 
         existing_columns = {col["name"] for col in inspector.get_columns("users")}
+        sqlite = engine.dialect.name == "sqlite"
         required_columns = {
-            "is_verified": "BOOLEAN NOT NULL DEFAULT FALSE",
+            "is_verified": "BOOLEAN NOT NULL DEFAULT 0" if sqlite else "BOOLEAN NOT NULL DEFAULT FALSE",
             "verification_token_hash": "VARCHAR(255)",
-            "verification_token_expires_at": "TIMESTAMP WITH TIME ZONE",
-            "verification_token_sent_at": "TIMESTAMP WITH TIME ZONE",
-            "created_at": "TIMESTAMP WITH TIME ZONE DEFAULT NOW()",
+            "verification_token_expires_at": "DATETIME" if sqlite else "TIMESTAMP WITH TIME ZONE",
+            "verification_token_sent_at": "DATETIME" if sqlite else "TIMESTAMP WITH TIME ZONE",
+            "verification_attempts": "INTEGER NOT NULL DEFAULT 0",
+            "created_at": "DATETIME" if sqlite else "TIMESTAMP WITH TIME ZONE DEFAULT NOW()",
         }
 
         with engine.begin() as conn:
             for column_name, column_sql in required_columns.items():
                 if column_name not in existing_columns:
-                    conn.execute(text(f"ALTER TABLE users ADD COLUMN IF NOT EXISTS {column_name} {column_sql}"))
+                    if sqlite:
+                        conn.execute(text(f"ALTER TABLE users ADD COLUMN {column_name} {column_sql}"))
+                    else:
+                        conn.execute(text(f"ALTER TABLE users ADD COLUMN IF NOT EXISTS {column_name} {column_sql}"))
 
-            if "is_verified" in existing_columns:
-                conn.execute(text("UPDATE users SET is_verified = FALSE WHERE is_verified IS NULL"))
+            if "is_verified" in existing_columns or "is_verified" in required_columns:
+                conn.execute(text("UPDATE users SET is_verified = 0 WHERE is_verified IS NULL") if sqlite else text("UPDATE users SET is_verified = FALSE WHERE is_verified IS NULL"))
     except Exception:
         # Let the app keep booting in local/dev setups, but do not silently ignore real DB problems.
         # The migration should be visible in logs while preserving user data.

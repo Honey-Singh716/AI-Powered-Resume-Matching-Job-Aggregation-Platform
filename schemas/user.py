@@ -30,6 +30,8 @@ class UserResponse(BaseModel):
 
     detail: str | None = None
     verification_email_sent: bool | None = None
+    verified: bool | None = None
+    retry_after_seconds: int | None = None
 
     class Config:
 
